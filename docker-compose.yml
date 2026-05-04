@@ -41,6 +41,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
       ApiBaseUrl: http://api:8080
+      ApiPublicUrl: http://localhost:5088
     ports:
       - "5089:8080"
     depends_on:

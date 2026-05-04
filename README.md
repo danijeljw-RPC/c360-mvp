@@ -273,6 +273,166 @@ DB:     localhost:54329
 
 ---
 
+## Deployment Guide
+
+This section is for the infrastructure team. It explains how to run the system in three environments: local development, internal intranet, and public internet (e.g. `https://demo.cinturon360.com`).
+
+### Why there are two API URL settings
+
+The system has two services in Docker:
+
+| Service | Internal Docker hostname | Host port |
+|---|---|---|
+| API (`Cinturon360.Mock.Api`) | `api:8080` | `5088` |
+| Web (`Cinturon360.Mock.Web`) | `web:8080` | `5089` |
+
+The **web server** calls the API on behalf of the Blazor application using `ApiBaseUrl`. This is a server-to-server call inside the Docker network, so it uses the Docker service name `http://api:8080`.
+
+Some actions — such as downloading a generated CSV export — produce a URL that the **browser** must navigate to directly. That URL must use a hostname the browser can resolve. This is controlled by a separate setting: `ApiPublicUrl`.
+
+**Rule:**
+- `ApiBaseUrl` = what the web container uses to call the API internally. Never change this unless you change the Docker network topology.
+- `ApiPublicUrl` = what the browser uses to reach the API. This must match however you expose the API to the outside world.
+
+---
+
+### Environment 1 — Local development (default)
+
+No changes needed. Run:
+
+```bash
+docker compose up -d --build
+```
+
+| Setting | Value |
+|---|---|
+| `ApiBaseUrl` | `http://api:8080` (Docker internal — do not change) |
+| `ApiPublicUrl` | `http://localhost:5088` (default) |
+
+Open the UI at `http://localhost:5089`.
+
+---
+
+### Environment 2 — Internal intranet server
+
+The server is on your network at a known IP or hostname, e.g. `192.168.1.50` or `c360-demo.company.local`.
+
+No reverse proxy needed if plain HTTP is acceptable. The API port (`5088`) and web port (`5089`) must both be accessible from the demo machine's browser.
+
+Set `ApiPublicUrl` in `docker-compose.yml` before running:
+
+```yaml
+services:
+  web:
+    environment:
+      ApiBaseUrl: http://api:8080       # DO NOT CHANGE — Docker internal
+      ApiPublicUrl: http://192.168.1.50:5088   # replace with your server IP or hostname
+```
+
+Or pass it as an environment variable without editing the file:
+
+```bash
+ApiPublicUrl=http://192.168.1.50:5088 docker compose up -d --build
+```
+
+Then open the UI at `http://192.168.1.50:5089`.
+
+---
+
+### Environment 3 — Public internet with HTTPS (client demo)
+
+This is the recommended setup for demoing to clients over a public domain such as `https://demo.cinturon360.com`.
+
+You need a reverse proxy (nginx, Caddy, or Traefik) running on the same host as Docker. The proxy handles TLS termination and forwards traffic to the two containers.
+
+#### Recommended: two subdomains
+
+| Public URL | Proxies to |
+|---|---|
+| `https://demo.cinturon360.com` | `http://localhost:5089` (web container) |
+| `https://api-demo.cinturon360.com` | `http://localhost:5088` (API container) |
+
+Set `docker-compose.yml`:
+
+```yaml
+services:
+  web:
+    environment:
+      ApiBaseUrl: http://api:8080                         # DO NOT CHANGE
+      ApiPublicUrl: https://api-demo.cinturon360.com      # public API hostname
+```
+
+#### Alternative: single domain with path-based routing
+
+If you only have one domain and want to serve both web and API from it:
+
+| Public URL | Proxies to |
+|---|---|
+| `https://demo.cinturon360.com` | `http://localhost:5089` (web) |
+| `https://demo.cinturon360.com/api/*` | `http://localhost:5088` (API) |
+
+Set `docker-compose.yml`:
+
+```yaml
+services:
+  web:
+    environment:
+      ApiBaseUrl: http://api:8080                         # DO NOT CHANGE
+      ApiPublicUrl: https://demo.cinturon360.com          # same domain — /api/* routed to API container
+```
+
+Your reverse proxy must forward `location /api/` to `http://localhost:5088`. Example nginx block:
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name demo.cinturon360.com;
+
+    # TLS config here (cert/key or certbot managed)
+
+    # API traffic — forward /api/* to the API container
+    location /api/ {
+        proxy_pass http://localhost:5088;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # All other traffic — forward to the Blazor web container
+    location / {
+        proxy_pass http://localhost:5089;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";   # required for Blazor Server SignalR
+    }
+}
+```
+
+> **Blazor Server requires WebSocket / SignalR.** Ensure your proxy passes `Upgrade` and `Connection` headers as shown above. If WebSocket is blocked, the UI will not function after initial load.
+
+#### SSL certificates
+
+For a public demo domain, use [Let's Encrypt](https://letsencrypt.org/) via certbot or Caddy's automatic TLS. For an internal domain, use your organisation's certificate authority.
+
+---
+
+### Quick reference — what to change per environment
+
+| Environment | `ApiBaseUrl` | `ApiPublicUrl` |
+|---|---|---|
+| Local (`localhost`) | `http://api:8080` | `http://localhost:5088` |
+| Intranet by IP | `http://api:8080` | `http://192.168.x.x:5088` |
+| Intranet by hostname | `http://api:8080` | `http://c360-demo.company.local:5088` |
+| Public HTTPS (two subdomains) | `http://api:8080` | `https://api-demo.cinturon360.com` |
+| Public HTTPS (single domain) | `http://api:8080` | `https://demo.cinturon360.com` |
+
+`ApiBaseUrl` is always `http://api:8080`. Only `ApiPublicUrl` changes between environments.
+
+---
+
 ## Core Domain Concepts
 
 ### Organisation hierarchy

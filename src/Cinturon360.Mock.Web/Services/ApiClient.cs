@@ -3,7 +3,9 @@ using Cinturon360.Mock.Shared.Dtos;
 
 namespace Cinturon360.Mock.Web.Services;
 
-public sealed class ApiClient(HttpClient http, SessionState session)
+public sealed record ApiPublicBaseUrl(string Value);
+
+public sealed class ApiClient(HttpClient http, SessionState session, ApiPublicBaseUrl publicBase)
 {
     private void SetActor()
     {
@@ -135,7 +137,7 @@ public sealed class ApiClient(HttpClient http, SessionState session)
         return await r.Content.ReadFromJsonAsync<FinanceExportBatchDto>();
     }
 
-    public string GetExportDownloadUrl(Guid batchId) => $"{http.BaseAddress}api/finance-exports/{batchId}/download";
+    public string GetExportDownloadUrl(Guid batchId) => $"{publicBase.Value.TrimEnd('/')}/api/finance-exports/{batchId}/download";
 
     private sealed record SimulationResult(bool succeeded, string message, string note);
 }
