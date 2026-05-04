@@ -1,0 +1,20 @@
+@inject ApiClient Api
+
+<div style="display:flex;align-items:center;gap:8px;">
+    <button class="btn btn-outline" style="padding:2px 10px;font-size:0.8rem;" @onclick="() => OnSelect.InvokeAsync(Org)">@Org.Name</button>
+    <span class="badge badge-blue">@Org.Type</span>
+</div>
+@if (Org.Children?.Count > 0)
+{
+    <ul style="list-style:none;padding-left:24px;border-left:2px solid #dbeafe;margin:4px 0 4px 16px;">
+        @foreach (var child in Org.Children)
+        {
+            <li style="padding:4px 0;"><OrgNode Org="child" OnSelect="OnSelect" /></li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter] public OrganisationDto Org { get; set; } = null!;
+    [Parameter] public EventCallback<OrganisationDto> OnSelect { get; set; }
+}

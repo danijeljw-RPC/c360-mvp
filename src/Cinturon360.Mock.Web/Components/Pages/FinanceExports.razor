@@ -1,0 +1,60 @@
+@page "/finance-exports"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Finance Exports</h1>
+    <div class="alert alert-info">Export internal invoices and ledger records to external finance systems. All exports are simulated — no data is sent to live systems.</div>
+
+    <div class="card">
+        <h2>Create Export</h2>
+        <div style="display:flex;gap:10px;align-items:center;">
+            <select class="form-control" style="width:200px;" @bind="_target">
+                <option value="Xero">Xero</option>
+                <option value="NetSuite">NetSuite</option>
+                <option value="Generic">Generic Ledger CSV</option>
+            </select>
+            <button class="btn btn-primary" @onclick="CreateExport" disabled="@_working">Generate Export</button>
+        </div>
+        @if (!string.IsNullOrEmpty(_msg)) { <div class="alert alert-success" style="margin-top:8px;">@_msg</div> }
+    </div>
+
+    @if (_batches != null && _batches.Count > 0)
+    {
+        <table>
+            <thead><tr><th>Batch ID</th><th>Target</th><th>Created</th><th>Invoices</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var b in _batches)
+                {
+                    <tr>
+                        <td><code>@b.Id.ToString()[..8]</code></td>
+                        <td>@b.ExportTarget</td>
+                        <td>@b.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@b.InvoiceCount</td>
+                        <td><span class="badge badge-green">@b.Status</span></td>
+                        <td><a class="btn btn-outline" href="@Api.GetExportDownloadUrl(b.Id)" target="_blank">Download CSV</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<FinanceExportBatchDto>? _batches;
+    string _target = "Xero";
+    bool _working;
+    string _msg = "";
+    protected override async Task OnInitializedAsync() { _batches = await Api.GetFinanceExportsAsync(); }
+    async Task CreateExport()
+    {
+        _working = true;
+        var batch = await Api.CreateFinanceExportAsync(_target);
+        if (batch != null) { _msg = $"Export batch created: {batch.Id}"; _batches = await Api.GetFinanceExportsAsync(); }
+        _working = false;
+    }
+}

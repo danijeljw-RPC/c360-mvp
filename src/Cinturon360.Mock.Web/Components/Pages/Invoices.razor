@@ -1,0 +1,45 @@
+@page "/invoices"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Invoices</h1>
+    @if (_loading) { <p>Loading...</p> }
+    else if (_invoices != null)
+    {
+        <table>
+            <thead><tr><th>Invoice #</th><th>Seller</th><th>Buyer</th><th>Booking</th><th>Mode</th><th>Provider</th><th>Total (AUD)</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var i in _invoices)
+                {
+                    <tr>
+                        <td><strong>@i.InvoiceNumber</strong></td>
+                        <td>@i.SellerOrganisationName</td>
+                        <td>@i.BuyerOrganisationName</td>
+                        <td>@(i.BookingReference ?? "—")</td>
+                        <td><span class="badge badge-gray">@i.CollectionMode</span></td>
+                        <td>@i.PaymentProviderType</td>
+                        <td>@i.TotalAmount.ToString("N2")</td>
+                        <td><span class="badge @StatusBadge(i.Status)">@i.Status</span></td>
+                        <td><a class="btn btn-outline" href="/invoices/@i.Id">View</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<InvoiceDto>? _invoices;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _invoices = await Api.GetInvoicesAsync(); _loading = false; }
+    static string StatusBadge(InvoiceStatus s) => s switch {
+        InvoiceStatus.Paid => "badge-green", InvoiceStatus.Failed => "badge-red",
+        InvoiceStatus.ShadowOnly => "badge-gray", InvoiceStatus.ExternallyManaged => "badge-purple",
+        InvoiceStatus.PaymentPending => "badge-yellow", _ => "badge-blue"
+    };
+}

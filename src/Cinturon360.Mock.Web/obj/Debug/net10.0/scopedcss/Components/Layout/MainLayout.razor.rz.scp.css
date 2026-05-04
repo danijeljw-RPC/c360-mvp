@@ -1,0 +1,34 @@
+.layout-wrapper[b-7e17gl004c] { display: flex; min-height: 100vh; }
+.sidebar[b-7e17gl004c] { width: 220px; background: #1a2235; color: #cdd; flex-shrink: 0; display: flex; flex-direction: column; padding: 0; }
+.sidebar-brand[b-7e17gl004c] { padding: 16px; background: #0f1623; }
+.sidebar-brand strong[b-7e17gl004c] { display: block; color: #7eb8f7; font-size: 1rem; }
+.sidebar-brand small[b-7e17gl004c] { color: #8899aa; font-size: 0.7rem; }
+.sidebar-user[b-7e17gl004c] { padding: 10px 16px; border-bottom: 1px solid #2a3545; }
+.sidebar-user small[b-7e17gl004c] { color: #aab; font-size: 0.75rem; }
+.nav-list[b-7e17gl004c] { list-style: none; padding: 0; margin: 0; flex: 1; }
+.nav-list li a[b-7e17gl004c], .nav-list li[b-7e17gl004c]  a { display: block; padding: 8px 16px; color: #bcd; text-decoration: none; font-size: 0.85rem; }
+.nav-list li a:hover[b-7e17gl004c], .nav-list li[b-7e17gl004c]  a.active { background: #2a3a52; color: #fff; }
+.nav-divider[b-7e17gl004c] { padding: 6px 16px 2px; font-size: 0.65rem; color: #556; text-transform: uppercase; letter-spacing: 1px; }
+.main-content[b-7e17gl004c] { flex: 1; background: #f0f4f8; overflow-y: auto; }
+.sim-banner[b-7e17gl004c] { background: #2d4a6a; color: #aed; padding: 6px 20px; font-size: 0.75rem; border-bottom: 1px solid #3a5a7a; }
+
+#blazor-error-ui[b-7e17gl004c] {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss[b-7e17gl004c] {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

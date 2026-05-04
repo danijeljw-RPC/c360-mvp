@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: cinturon360-mock-postgres
+    environment:
+      POSTGRES_DB: cinturon360_mock
+      POSTGRES_USER: cinturon360
+      POSTGRES_PASSWORD: cinturon360_dev_password
+    ports:
+      - "54329:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cinturon360 -d cinturon360_mock"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Cinturon360.Mock.Api/Dockerfile
+    container_name: cinturon360-mock-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=cinturon360_mock;Username=cinturon360;Password=cinturon360_dev_password
+    ports:
+      - "5088:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: src/Cinturon360.Mock.Web/Dockerfile
+    container_name: cinturon360-mock-web
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ApiBaseUrl: http://api:8080
+    ports:
+      - "5089:8080"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

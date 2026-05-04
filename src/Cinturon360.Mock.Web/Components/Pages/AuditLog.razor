@@ -1,0 +1,36 @@
+@page "/audit"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Audit Log</h1>
+    @if (_loading) { <p>Loading...</p> }
+    else if (_events != null)
+    {
+        <table>
+            <thead><tr><th>Time</th><th>Actor</th><th>Entity</th><th>Action</th><th>Summary</th></tr></thead>
+            <tbody>
+                @foreach (var e in _events)
+                {
+                    <tr>
+                        <td>@e.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@e.ActorEmail</td>
+                        <td>@e.EntityType</td>
+                        <td><span class="badge badge-blue">@e.Action</span></td>
+                        <td>@e.Summary</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<AuditEventDto>? _events;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _events = await Api.GetAuditAsync(); _loading = false; }
+}

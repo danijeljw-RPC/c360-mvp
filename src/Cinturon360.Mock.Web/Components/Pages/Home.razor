@@ -1,0 +1,45 @@
+@page "/"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Dashboard</h1>
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_data != null)
+    {
+        <div class="card-grid">
+            <div class="stat-card"><div class="stat-value">@_data.BookingsImported</div><div class="stat-label">Bookings Imported</div></div>
+            <div class="stat-card" style="border-left:3px solid #f59e0b;"><div class="stat-value" style="color:#b45309;">@_data.BookingsNeedingReview</div><div class="stat-label">Needs Review</div></div>
+            <div class="stat-card"><div class="stat-value">@_data.InvoicesIssued</div><div class="stat-label">Invoices Issued</div></div>
+            <div class="stat-card" style="border-left:3px solid #3b82f6;"><div class="stat-value" style="color:#1d4ed8;">@_data.PaymentsPending</div><div class="stat-label">Payments Pending</div></div>
+            <div class="stat-card" style="border-left:3px solid #ef4444;"><div class="stat-value" style="color:#991b1b;">@_data.FailedPayments</div><div class="stat-label">Failed Payments</div></div>
+            <div class="stat-card"><div class="stat-value">AUD @_data.DepositsAmountDue.ToString("N2")</div><div class="stat-label">Deposits Due</div></div>
+            <div class="stat-card"><div class="stat-value">AUD @_data.FutureBalancesAmountDue.ToString("N2")</div><div class="stat-label">Future Balances Due</div></div>
+            <div class="stat-card" style="border-left:3px solid #f97316;"><div class="stat-value" style="color:#c2410c;">AUD @_data.AdmExposure.ToString("N2")</div><div class="stat-label">ADM Exposure</div></div>
+            <div class="stat-card"><div class="stat-value">AUD @_data.AcmCredits.ToString("N2")</div><div class="stat-label">ACM Credits</div></div>
+            <div class="stat-card"><div class="stat-value">@_data.ManualInvoices</div><div class="stat-label">Manual Invoices</div></div>
+            <div class="stat-card"><div class="stat-value">@_data.ExternalSettlementItems</div><div class="stat-label">External Settlement</div></div>
+            <div class="stat-card"><div class="stat-value">AUD @_data.ShadowBillingTotal.ToString("N2")</div><div class="stat-label">Shadow Billing Total</div></div>
+        </div>
+
+        <div class="card">
+            <h2>Architecture Principle</h2>
+            <p style="color:#374151;line-height:1.6;">
+                <strong>Cinturon360 owns the billing logic, ledger, invoice structure and audit trail.</strong><br/>
+                Payment providers (Stripe, Airwallex, Braintree, PayPal, Square), finance systems (Xero, NetSuite) and BSP/GDS channels are downstream execution and export channels only.
+                All financial decisions are made and recorded internally before any provider is involved.
+            </p>
+        </div>
+    }
+</div>
+
+@code {
+    DashboardDto? _data;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _data = await Api.GetDashboardAsync(); _loading = false; }
+}

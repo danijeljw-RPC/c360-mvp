@@ -1,0 +1,34 @@
+.layout-wrapper { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; background: #1a2235; color: #cdd; flex-shrink: 0; display: flex; flex-direction: column; padding: 0; }
+.sidebar-brand { padding: 16px; background: #0f1623; }
+.sidebar-brand strong { display: block; color: #7eb8f7; font-size: 1rem; }
+.sidebar-brand small { color: #8899aa; font-size: 0.7rem; }
+.sidebar-user { padding: 10px 16px; border-bottom: 1px solid #2a3545; }
+.sidebar-user small { color: #aab; font-size: 0.75rem; }
+.nav-list { list-style: none; padding: 0; margin: 0; flex: 1; }
+.nav-list li a, .nav-list li ::deep a { display: block; padding: 8px 16px; color: #bcd; text-decoration: none; font-size: 0.85rem; }
+.nav-list li a:hover, .nav-list li ::deep a.active { background: #2a3a52; color: #fff; }
+.nav-divider { padding: 6px 16px 2px; font-size: 0.65rem; color: #556; text-transform: uppercase; letter-spacing: 1px; }
+.main-content { flex: 1; background: #f0f4f8; overflow-y: auto; }
+.sim-banner { background: #2d4a6a; color: #aed; padding: 6px 20px; font-size: 0.75rem; border-bottom: 1px solid #3a5a7a; }
+
+#blazor-error-ui {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

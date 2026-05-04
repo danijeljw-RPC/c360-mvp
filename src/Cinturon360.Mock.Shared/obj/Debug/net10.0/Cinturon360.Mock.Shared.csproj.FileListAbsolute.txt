@@ -1,0 +1,11 @@
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/bin/Debug/net10.0/Cinturon360.Mock.Shared.deps.json
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/bin/Debug/net10.0/Cinturon360.Mock.Shared.dll
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/bin/Debug/net10.0/Cinturon360.Mock.Shared.pdb
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/Cinturon360.Mock.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/Cinturon360.Mock.Shared.AssemblyInfoInputs.cache
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/Cinturon360.Mock.Shared.AssemblyInfo.cs
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/Cinturon360.Mock.Shared.csproj.CoreCompileInputs.cache
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/Cinturon360.Mock.Shared.dll
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/refint/Cinturon360.Mock.Shared.dll
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/Cinturon360.Mock.Shared.pdb
+/Users/danijeljw/Developer/c360-mvp/src/Cinturon360.Mock.Shared/obj/Debug/net10.0/ref/Cinturon360.Mock.Shared.dll

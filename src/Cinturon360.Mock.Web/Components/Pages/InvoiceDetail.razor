@@ -1,0 +1,93 @@
+@page "/invoices/{Id:guid}"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    @if (_loading) { <p>Loading...</p> }
+    else if (_invoice != null)
+    {
+        <div class="page-header">
+            <h1>Invoice @_invoice.InvoiceNumber</h1>
+            <span class="badge @StatusBadge(_invoice.Status)" style="font-size:0.85rem;padding:5px 12px;">@_invoice.Status</span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(_msg)) { <div class="alert @(_ok ? "alert-success" : "alert-error")">@_msg</div> }
+
+        <div class="sim-note">Provider action simulated only. No external payment was made. Cinturon360 internal invoice remains the source of truth.</div>
+
+        <div class="card">
+            <table>
+                <tr><td><strong>Seller</strong></td><td>@_invoice.SellerOrganisationName</td><td><strong>Buyer</strong></td><td>@_invoice.BuyerOrganisationName</td></tr>
+                <tr><td><strong>Booking</strong></td><td>@(_invoice.BookingReference ?? "—")</td><td><strong>Collection Mode</strong></td><td>@_invoice.CollectionMode</td></tr>
+                <tr><td><strong>Provider</strong></td><td>@_invoice.PaymentProviderType</td><td><strong>Fake Ext. Ref</strong></td><td>@(_invoice.FakeExternalInvoiceId ?? "—")</td></tr>
+                <tr><td><strong>Issue Date</strong></td><td>@_invoice.IssueDate</td><td><strong>Due Date</strong></td><td>@(_invoice.DueDate?.ToString() ?? "—")</td></tr>
+                <tr><td><strong>Subtotal</strong></td><td>@_invoice.SubtotalAmount.ToString("N2")</td><td><strong>Tax</strong></td><td>@_invoice.TaxAmount.ToString("N2")</td></tr>
+                <tr><td><strong>Total</strong></td><td colspan="3"><strong>@_invoice.CurrencyCode @_invoice.TotalAmount.ToString("N2")</strong></td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Invoice Lines</h2>
+            <table>
+                <thead><tr><th>Type</th><th>Description</th><th>Qty</th><th>Unit</th><th>Tax</th><th>Total</th></tr></thead>
+                <tbody>
+                    @foreach (var l in _invoice.Lines)
+                    {
+                        <tr>
+                            <td><span class="badge badge-gray">@l.LineType</span></td>
+                            <td>@l.Description</td>
+                            <td>@l.Quantity</td>
+                            <td>@l.UnitAmount.ToString("N2")</td>
+                            <td>@l.TaxAmount.ToString("N2")</td>
+                            <td><strong>@l.LineTotalAmount.ToString("N2")</strong></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Actions</h2>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                @if (_invoice.Status == InvoiceStatus.Issued || _invoice.Status == InvoiceStatus.Draft)
+                {
+                    <button class="btn btn-primary" @onclick="Collect" disabled="@_working">Simulate Payment Collection</button>
+                }
+                @if (_invoice.Status == InvoiceStatus.Failed)
+                {
+                    <button class="btn btn-success" @onclick="Retry" disabled="@_working">Retry Payment</button>
+                }
+                @if (_invoice.Status == InvoiceStatus.PaymentPending)
+                {
+                    <button class="btn btn-success" @onclick="ManualPaid" disabled="@_working">Mark Manual Payment Received</button>
+                }
+                @if (_invoice.Status == InvoiceStatus.ExternallyManaged)
+                {
+                    <button class="btn btn-success" @onclick="MarkExternal" disabled="@_working">Mark Externally Settled</button>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    InvoiceDto? _invoice;
+    bool _loading = true, _working;
+    string _msg = ""; bool _ok;
+
+    protected override async Task OnInitializedAsync() { _invoice = await Api.GetInvoiceAsync(Id); _loading = false; }
+    async Task Collect() { _working = true; var (ok, msg) = await Api.SimulateCollectionAsync(Id); _msg = msg; _ok = ok; _invoice = await Api.GetInvoiceAsync(Id); _working = false; }
+    async Task Retry() { _working = true; var (ok, msg) = await Api.RetryPaymentAsync(Id); _msg = msg; _ok = ok; _invoice = await Api.GetInvoiceAsync(Id); _working = false; }
+    async Task ManualPaid() { _working = true; await Api.MarkManualPaymentReceivedAsync(Id); _msg = "Manual payment recorded."; _ok = true; _invoice = await Api.GetInvoiceAsync(Id); _working = false; }
+    async Task MarkExternal() { _working = true; await Api.MarkExternallySettledAsync(Id); _msg = "Marked externally settled."; _ok = true; _invoice = await Api.GetInvoiceAsync(Id); _working = false; }
+    static string StatusBadge(InvoiceStatus s) => s switch {
+        InvoiceStatus.Paid => "badge-green", InvoiceStatus.Failed => "badge-red",
+        InvoiceStatus.ShadowOnly => "badge-gray", InvoiceStatus.ExternallyManaged => "badge-purple",
+        InvoiceStatus.PaymentPending => "badge-yellow", _ => "badge-blue"
+    };
+}

@@ -1,0 +1,20 @@
+{
+  "pnr": "C360C3",
+  "source": "Mock Offline Package",
+  "client": "Coca-Cola",
+  "traveller": {
+    "name": "Morgan Lee",
+    "email": "morgan.lee@coca-cola.example"
+  },
+  "policyCode": "CCA-NA",
+  "costCentre": "NA-MARKETING-010",
+  "package": {
+    "total": 5000.0,
+    "deposit": 1000.0,
+    "serviceFee": 150.0,
+    "balance": 4000.0,
+    "balanceDueDaysBeforeDeparture": 30,
+    "departureDate": "2026-09-01"
+  },
+  "paymentScenario": "DEPOSIT_NOW_BALANCE_LATER"
+}

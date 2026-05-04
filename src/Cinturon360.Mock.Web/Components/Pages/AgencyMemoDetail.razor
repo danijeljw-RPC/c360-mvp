@@ -1,0 +1,53 @@
+@page "/agency-memos/{Id:guid}"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    @if (_loading) { <p>Loading...</p> }
+    else if (_memo != null)
+    {
+        <h1>@_memo.MemoType: @_memo.MemoNumber</h1>
+        @if (!string.IsNullOrEmpty(_msg)) { <div class="alert @(_ok ? "alert-success" : "alert-error")">@_msg</div> }
+
+        <div class="card">
+            <table>
+                <tr><td><strong>Type</strong></td><td>@_memo.MemoType</td><td><strong>Airline</strong></td><td>@_memo.AirlineCode</td></tr>
+                <tr><td><strong>Ticket</strong></td><td>@(_memo.TicketNumber ?? "—")</td><td><strong>PNR</strong></td><td>@(_memo.PnrCode ?? "—")</td></tr>
+                <tr><td><strong>Booking</strong></td><td>@(_memo.BookingReference ?? "Unmatched")</td><td><strong>Client</strong></td><td>@(_memo.ClientOrganisationName ?? "—")</td></tr>
+                <tr><td><strong>Reason Code</strong></td><td>@_memo.ReasonCode</td><td><strong>Reason</strong></td><td>@_memo.ReasonDescription</td></tr>
+                <tr><td><strong>Amount</strong></td><td><strong>@_memo.CurrencyCode @_memo.Amount.ToString("N2")</strong></td><td><strong>Status</strong></td><td>@_memo.Status</td></tr>
+                <tr><td><strong>Current Outcome</strong></td><td colspan="3">@(_memo.Outcome?.ToString() ?? "Not yet decided")</td></tr>
+            </table>
+        </div>
+
+        @if (_memo.Status != AgencyMemoStatus.Settled && _memo.Status != AgencyMemoStatus.Closed)
+        {
+            <div class="card">
+                <h2>Set Outcome</h2>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button class="btn btn-secondary" @onclick='() => SetOutcome(AgencyMemoOutcome.AbsorbedByTmc)'>Absorb by TMC</button>
+                    <button class="btn btn-primary" @onclick='() => SetOutcome(AgencyMemoOutcome.RechargedToClient)'>Recharge to Client</button>
+                    <button class="btn btn-danger" @onclick='() => SetOutcome(AgencyMemoOutcome.DisputedWithAirline)'>Dispute with Airline</button>
+                    @if (_memo.MemoType == AgencyMemoType.Acm)
+                    {
+                        <button class="btn btn-success" @onclick='() => SetOutcome(AgencyMemoOutcome.CreditedToClient)'>Credit to Client</button>
+                    }
+                    <button class="btn btn-secondary" @onclick='() => SetOutcome(AgencyMemoOutcome.WrittenOff)'>Write Off</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    AgencyMemoDto? _memo;
+    bool _loading = true;
+    string _msg = ""; bool _ok;
+    protected override async Task OnInitializedAsync() { _memo = await Api.GetAgencyMemoAsync(Id); _loading = false; }
+    async Task SetOutcome(AgencyMemoOutcome outcome) { await Api.SetMemoOutcomeAsync(Id, outcome); _memo = await Api.GetAgencyMemoAsync(Id); _msg = $"Outcome set: {outcome}"; _ok = true; }
+}

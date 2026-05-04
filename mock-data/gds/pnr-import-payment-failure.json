@@ -1,0 +1,31 @@
+{
+  "pnr": "C360D4",
+  "source": "MockAmadeus",
+  "client": "Coca-Cola",
+  "tmc": "HelloWorld Travel",
+  "traveller": {
+    "name": "Avery Williams",
+    "email": "avery.williams@example.test"
+  },
+  "policyCode": "CCA-EMEA",
+  "costCentre": "EMEA-MARKETING",
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "SYD",
+      "to": "LHR",
+      "depart": "2026-08-10T22:00:00+10:00",
+      "arrive": "2026-08-11T05:30:00+00:00",
+      "carrier": "BA",
+      "flight": "BA16"
+    }
+  ],
+  "ticket": {
+    "number": "1250000000004",
+    "fare": 1950.00,
+    "tax": 285.60,
+    "currency": "AUD"
+  },
+  "serviceFees": [{"code": "INTERNATIONAL_BOOKING_FEE", "amount": 95.0}],
+  "paymentScenario": "PAYMENT_FAIL_THEN_RETRY"
+}

@@ -1,0 +1,31 @@
+{
+  "pnr": "C360E5",
+  "source": "MockAmadeus",
+  "client": "Coca-Cola",
+  "tmc": "HelloWorld Travel",
+  "traveller": {
+    "name": "Taylor Chen",
+    "email": "taylor.chen@example.test"
+  },
+  "policyCode": "CCA-EXEC",
+  "costCentre": "EXEC",
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "SYD",
+      "to": "SIN",
+      "depart": "2026-09-05T08:00:00+10:00",
+      "arrive": "2026-09-05T13:40:00+08:00",
+      "carrier": "SQ",
+      "flight": "SQ221"
+    }
+  ],
+  "ticket": {
+    "number": "6180000000005",
+    "fare": 3200.00,
+    "tax": 390.00,
+    "currency": "AUD"
+  },
+  "serviceFees": [{"code": "INTERNATIONAL_BOOKING_FEE", "amount": 95.0}],
+  "paymentScenario": "MANUAL_INVOICE"
+}

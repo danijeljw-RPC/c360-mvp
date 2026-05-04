@@ -1,0 +1,31 @@
+{
+  "pnr": "C360F6",
+  "source": "MockSabre",
+  "client": "Coca-Cola",
+  "tmc": "HelloWorld Travel",
+  "traveller": {
+    "name": "Morgan Patel",
+    "email": "morgan.patel@example.test"
+  },
+  "policyCode": "CCA-NA",
+  "costCentre": "NA-FINANCE",
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "SYD",
+      "to": "LAX",
+      "depart": "2026-10-15T14:00:00+10:00",
+      "arrive": "2026-10-15T09:30:00-07:00",
+      "carrier": "QF",
+      "flight": "QF11"
+    }
+  ],
+  "ticket": {
+    "number": "0810000000006",
+    "fare": 2800.00,
+    "tax": 430.00,
+    "currency": "AUD"
+  },
+  "serviceFees": [{"code": "INTERNATIONAL_BOOKING_FEE", "amount": 95.0}],
+  "paymentScenario": "EXTERNAL_SETTLEMENT"
+}

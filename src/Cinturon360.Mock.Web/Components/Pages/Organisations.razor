@@ -1,0 +1,46 @@
+@page "/organisations"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Organisation Hierarchy</h1>
+    <div class="alert alert-info">Avanoa Technology is the platform vendor. HelloWorld Travel is a TMC. Coca-Cola is a client organisation. HelloWorld owns the commercial billing risk for Coca-Cola.</div>
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_orgs != null)
+    {
+        <div class="card">
+            <ul class="org-tree">
+                @foreach (var org in _orgs)
+                {
+                    <li><OrgNode Org="org" OnSelect="ShowDetail" /></li>
+                }
+            </ul>
+        </div>
+
+        @if (_selected != null)
+        {
+            <div class="card">
+                <h2>@_selected.Name</h2>
+                <table>
+                    <tr><th>Field</th><th>Value</th></tr>
+                    <tr><td>Code</td><td>@_selected.Code</td></tr>
+                    <tr><td>Type</td><td>@_selected.Type</td></tr>
+                    <tr><td>Parent</td><td>@(_selected.ParentOrganisationName ?? "— (root)")</td></tr>
+                </table>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    List<OrganisationDto>? _orgs;
+    OrganisationDto? _selected;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _orgs = await Api.GetOrgTreeAsync(); _loading = false; }
+    void ShowDetail(OrganisationDto org) => _selected = org;
+}

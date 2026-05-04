@@ -1,0 +1,63 @@
+@page "/imports"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>GDS / Content Import</h1>
+
+    @if (_loading) { <p>Loading files...</p> }
+    else if (_files != null)
+    {
+        <div class="card">
+            <h2>Select PNR File</h2>
+            <div class="form-group">
+                <select class="form-control" @onchange="e => _selected = e.Value?.ToString()">
+                    <option value="">-- select file --</option>
+                    @foreach (var f in _files)
+                    {
+                        <option value="@f.FileName">@f.DisplayName (@f.FileName)</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-primary" @onclick="Import" disabled="@(string.IsNullOrEmpty(_selected) || _importing)">
+                @(_importing ? "Importing..." : "Import Selected File")
+            </button>
+        </div>
+
+        @if (_result != null)
+        {
+            @if (_result.Success)
+            {
+                <div class="alert @(_result.NeedsReview ? "alert-warning" : "alert-success")">
+                    <strong>@(_result.NeedsReview ? "Imported — Needs Review" : "Import Successful")</strong><br/>
+                    PNR: @_result.PnrCode | Booking: @_result.BookingReference
+                    @if (_result.MissingFields.Count > 0)
+                    {
+                        <div style="margin-top:6px;">Missing: @string.Join(", ", _result.MissingFields)</div>
+                    }
+                </div>
+                @if (_result.BookingId.HasValue)
+                {
+                    <a class="btn btn-outline" href="/bookings/@_result.BookingId">View Booking</a>
+                }
+            }
+            else
+            {
+                <div class="alert alert-error">Import failed: @_result.ErrorMessage</div>
+            }
+        }
+    }
+</div>
+
+@code {
+    List<ImportFileDto>? _files;
+    string? _selected;
+    GdsImportResultDto? _result;
+    bool _loading = true, _importing;
+    protected override async Task OnInitializedAsync() { _files = await Api.GetGdsFilesAsync(); _loading = false; }
+    async Task Import() { _importing = true; _result = null; _result = await Api.ImportGdsFileAsync(_selected!); _importing = false; }
+}

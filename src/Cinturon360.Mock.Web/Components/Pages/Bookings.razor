@@ -1,0 +1,61 @@
+@page "/bookings"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <div class="page-header">
+        <h1>Bookings</h1>
+        <a class="btn btn-outline" href="/imports">+ Import GDS</a>
+    </div>
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_bookings != null)
+    {
+        <table>
+            <thead><tr><th>Reference</th><th>PNR</th><th>Traveller</th><th>Client</th><th>Policy</th><th>Cost Centre</th><th>Total (AUD)</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var b in _bookings)
+                {
+                    <tr>
+                        <td><strong>@b.BookingReference</strong></td>
+                        <td>@b.PnrCode</td>
+                        <td>@b.TravellerName</td>
+                        <td>@b.ClientOrganisationName</td>
+                        <td>@(b.TravelPolicyCode ?? "—")</td>
+                        <td>
+                            @if (string.IsNullOrEmpty(b.CostCentreCode))
+                            {
+                                <span class="missing-field">MISSING</span>
+                            }
+                            else
+                            {
+                                @b.CostCentreCode
+                            }
+                        </td>
+                        <td>@b.TotalAmount.ToString("N2")</td>
+                        <td><span class="badge @StatusBadge(b.Status)">@b.Status</span></td>
+                        <td><a class="btn btn-outline" href="/bookings/@b.Id">View</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<BookingDto>? _bookings;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _bookings = await Api.GetBookingsAsync(); _loading = false; }
+    static string StatusBadge(BookingStatus s) => s switch {
+        BookingStatus.NeedsReview => "badge-yellow",
+        BookingStatus.Paid => "badge-green",
+        BookingStatus.Invoiced => "badge-blue",
+        BookingStatus.ReadyForBilling => "badge-blue",
+        BookingStatus.Cancelled => "badge-red",
+        _ => "badge-gray"
+    };
+}

@@ -1,0 +1,173 @@
+@page "/bookings/{Id:guid}"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    @if (_loading) { <p>Loading...</p> }
+    else if (_booking != null)
+    {
+        <div class="page-header">
+            <h1>Booking: @_booking.BookingReference</h1>
+            <span class="badge @StatusBadge(_booking.Status)" style="font-size:0.85rem;padding:5px 12px;">@_booking.Status</span>
+        </div>
+
+        @if (_booking.MissingFields.Count > 0)
+        {
+            <div class="alert alert-warning">
+                <strong>This booking needs review before invoicing.</strong><br/>
+                Missing: @string.Join(", ", _booking.MissingFields)
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(_message))
+        {
+            <div class="alert @(_messageOk ? "alert-success" : "alert-error")">@_message</div>
+        }
+
+        <div class="card">
+            <h2>Summary</h2>
+            <table>
+                <tr><td><strong>PNR</strong></td><td>@_booking.PnrCode</td><td><strong>Source</strong></td><td>@_booking.SourceSystem</td></tr>
+                <tr><td><strong>Traveller</strong></td><td>@_booking.TravellerName (@_booking.TravellerEmail)</td><td><strong>Client</strong></td><td>@_booking.ClientOrganisationName</td></tr>
+                <tr><td><strong>TMC</strong></td><td>@_booking.TmcOrganisationName</td><td><strong>Departure</strong></td><td>@_booking.DepartureDate</td></tr>
+                <tr>
+                    <td><strong>Policy</strong></td>
+                    <td>
+                        @if (_booking.TravelPolicyCode == null && _booking.MissingFields.Contains("TravelPolicy"))
+                        {
+                            <select class="form-control" style="width:180px;display:inline-block;" @bind="_policyId">
+                                <option value="">Assign policy...</option>
+                                @foreach (var p in _policies ?? [])
+                                {
+                                    <option value="@p.Id">@p.Code — @p.Name</option>
+                                }
+                            </select>
+                            <button class="btn btn-primary" style="margin-left:6px;" @onclick="AssignPolicy">Apply</button>
+                        }
+                        else
+                        {
+                            <span>@(_booking.TravelPolicyCode ?? "—")</span>
+                        }
+                    </td>
+                    <td><strong>Cost Centre</strong></td>
+                    <td>
+                        @if (_booking.MissingFields.Contains("CostCentreCode"))
+                        {
+                            <input class="form-control" style="width:140px;display:inline-block;" @bind="_costCentre" placeholder="e.g. APAC-SALES" />
+                            <button class="btn btn-primary" style="margin-left:6px;" @onclick="AssignCostCentre">Apply</button>
+                        }
+                        else
+                        {
+                            <span>@(_booking.CostCentreCode ?? "—")</span>
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Amounts (AUD)</h2>
+            <table>
+                <thead><tr><th>Component</th><th>Amount</th></tr></thead>
+                <tbody>
+                    <tr><td>Supplier Fare</td><td>@_booking.SupplierAmount.ToString("N2")</td></tr>
+                    <tr><td>Tax</td><td>@_booking.TaxAmount.ToString("N2")</td></tr>
+                    <tr><td>Service Fee</td><td>@_booking.ServiceFeeAmount.ToString("N2")</td></tr>
+                    <tr><td>Card Surcharge</td><td>@_booking.SurchargeAmount.ToString("N2")</td></tr>
+                    <tr style="font-weight:bold;"><td>Total</td><td>@_booking.TotalAmount.ToString("N2")</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        @if (_booking.Segments.Count > 0)
+        {
+            <div class="card">
+                <h2>Itinerary</h2>
+                <table>
+                    <thead><tr><th>Type</th><th>Carrier</th><th>Flight</th><th>From</th><th>To</th><th>Departure</th></tr></thead>
+                    <tbody>
+                        @foreach (var s in _booking.Segments)
+                        {
+                            <tr>
+                                <td>@s.SegmentType</td>
+                                <td>@s.Carrier</td>
+                                <td>@s.FlightNumber</td>
+                                <td>@s.FromLocation</td>
+                                <td>@s.ToLocation</td>
+                                <td>@s.DepartureUtc?.ToString("yyyy-MM-dd HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div class="card">
+            <h2>Actions</h2>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                @if (_booking.Status == BookingStatus.ReadyForBilling)
+                {
+                    <button class="btn btn-primary" @onclick="GenerateInvoice" disabled="@_working">Generate Invoice</button>
+                }
+                @if (_booking.Status == BookingStatus.NeedsReview && _booking.MissingFields.Count == 0)
+                {
+                    <button class="btn btn-success" @onclick="MarkReady" disabled="@_working">Mark Ready for Billing</button>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    BookingDto? _booking;
+    List<TravelPolicyDto>? _policies;
+    bool _loading = true, _working;
+    string _message = "", _costCentre = "";
+    bool _messageOk;
+    string _policyId = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _booking = await Api.GetBookingAsync(Id);
+        _policies = await Api.GetTravelPoliciesAsync();
+        _loading = false;
+    }
+
+    async Task MarkReady() { _working = true; await Api.MarkReadyForBillingAsync(Id); _booking = await Api.GetBookingAsync(Id); _message = "Booking marked ready for billing."; _messageOk = true; _working = false; }
+
+    async Task GenerateInvoice()
+    {
+        _working = true;
+        var inv = await Api.GenerateInvoiceAsync(Id);
+        if (inv != null) { _message = $"Invoice {inv.InvoiceNumber} generated."; _messageOk = true; _booking = await Api.GetBookingAsync(Id); Nav.NavigateTo($"/invoices/{inv.Id}"); }
+        else { _message = "Failed to generate invoice."; _messageOk = false; }
+        _working = false;
+    }
+
+    async Task AssignCostCentre()
+    {
+        if (string.IsNullOrEmpty(_costCentre)) return;
+        await Api.SetCostCentreAsync(Id, _costCentre);
+        _booking = await Api.GetBookingAsync(Id);
+        _message = $"Cost centre set to {_costCentre}."; _messageOk = true;
+    }
+
+    async Task AssignPolicy()
+    {
+        if (string.IsNullOrEmpty(_policyId) || !Guid.TryParse(_policyId, out var pid)) return;
+        await Api.SetTravelPolicyAsync(Id, pid);
+        _booking = await Api.GetBookingAsync(Id);
+        _message = "Travel policy assigned."; _messageOk = true;
+    }
+
+    static string StatusBadge(BookingStatus s) => s switch {
+        BookingStatus.NeedsReview => "badge-yellow", BookingStatus.Paid => "badge-green",
+        BookingStatus.Invoiced => "badge-blue", BookingStatus.ReadyForBilling => "badge-blue",
+        BookingStatus.Cancelled => "badge-red", _ => "badge-gray"
+    };
+}

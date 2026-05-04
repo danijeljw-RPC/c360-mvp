@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Cinturon360.Mock.Api/Cinturon360.Mock.Api.csproj" />
+    <Project Path="src/Cinturon360.Mock.Shared/Cinturon360.Mock.Shared.csproj" />
+    <Project Path="src/Cinturon360.Mock.Web/Cinturon360.Mock.Web.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,36 @@
+{
+  "pnr": "C360A1",
+  "source": "Mock Amadeus",
+  "client": "Coca-Cola",
+  "tmc": "HelloWorld Travel",
+  "traveller": {
+    "name": "Alex Chen",
+    "email": "alex.chen@coca-cola.example"
+  },
+  "policyCode": "CCA-APAC",
+  "costCentre": "APAC-SALES-001",
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "SYD",
+      "to": "MEL",
+      "depart": "2026-06-15T09:00:00+10:00",
+      "arrive": "2026-06-15T10:35:00+10:00",
+      "carrier": "QF",
+      "flight": "QF401"
+    }
+  ],
+  "ticket": {
+    "number": "0810000000001",
+    "fare": 420.0,
+    "tax": 66.4,
+    "currency": "AUD"
+  },
+  "serviceFees": [
+    {
+      "code": "BOOKING_FEE",
+      "amount": 45.0
+    }
+  ],
+  "paymentScenario": "IMMEDIATE_SUCCESS"
+}

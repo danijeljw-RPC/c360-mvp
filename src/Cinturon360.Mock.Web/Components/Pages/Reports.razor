@@ -1,0 +1,72 @@
+@page "/reports"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Reports</h1>
+
+    <div class="card-grid">
+        <div class="stat-card" style="cursor:pointer;" @onclick='() => _tab = "balances"'><div class="stat-label">Outstanding Balances</div></div>
+        <div class="stat-card" style="cursor:pointer;" @onclick='() => _tab = "adm"'><div class="stat-label">ADM/ACM Exposure</div></div>
+        <div class="stat-card" style="cursor:pointer;" @onclick='() => _tab = "future"'><div class="stat-label">Future Balances</div></div>
+    </div>
+
+    @if (_tab == "balances")
+    {
+        <div class="card">
+            <h2>Outstanding Balances</h2>
+            @if (_balances == null) { <button class="btn btn-outline" @onclick="LoadBalances">Load</button> }
+            else
+            {
+                <table>
+                    <thead><tr><th>Booking</th><th>Traveller</th><th>Client</th><th>Invoice</th><th>Amount Due</th><th>Status</th><th>Due Date</th></tr></thead>
+                    <tbody>
+                        @foreach (var r in _balances)
+                        {
+                            <tr><td>@r.BookingReference</td><td>@r.TravellerName</td><td>@r.ClientOrganisationName</td><td>@r.InvoiceNumber</td><td>@r.CurrencyCode @r.AmountDue.ToString("N2")</td><td>@r.Status</td><td>@r.DueDate</td></tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+    else if (_tab == "adm")
+    {
+        <div class="card">
+            <h2>ADM/ACM Exposure</h2>
+            @if (_admAcm == null) { <button class="btn btn-outline" @onclick="LoadAdm">Load</button> }
+            else
+            {
+                <table>
+                    <thead><tr><th>Memo #</th><th>Type</th><th>Airline</th><th>Ticket</th><th>Booking</th><th>Reason</th><th>Amount</th><th>Status</th></tr></thead>
+                    <tbody>
+                        @foreach (var r in _admAcm)
+                        {
+                            <tr><td>@r.MemoNumber</td><td>@r.MemoType</td><td>@r.AirlineCode</td><td>@r.TicketNumber</td><td>@r.BookingReference</td><td>@r.ReasonCode</td><td>@r.CurrencyCode @r.Amount.ToString("N2")</td><td>@r.Status</td></tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+    else if (_tab == "future")
+    {
+        <div class="card">
+            <h2>Future Balances Due</h2>
+            <p class="text-muted">Bookings with deposit-now / balance-later payment schedules. View the Invoices list for full balance detail.</p>
+            <a class="btn btn-outline" href="/invoices">Go to Invoices</a>
+        </div>
+    }
+</div>
+
+@code {
+    string _tab = "balances";
+    List<OutstandingBalanceReportItem>? _balances;
+    List<AdmAcmExposureItem>? _admAcm;
+    async Task LoadBalances() { _balances = await Api.GetOutstandingBalancesAsync(); }
+    async Task LoadAdm() { _admAcm = await Api.GetAdmAcmExposureAsync(); }
+}

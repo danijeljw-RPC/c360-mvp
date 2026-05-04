@@ -1,0 +1,72 @@
+@page "/agency-memos"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <div class="page-header">
+        <h1>ADM/ACM Workbench</h1>
+        <button class="btn btn-outline" @onclick="() => _showImport = !_showImport">Import BSP CSV</button>
+    </div>
+
+    @if (_showImport)
+    {
+        <div class="card">
+            <h2>Import BSP ADM/ACM CSV</h2>
+            <div class="form-group">
+                <textarea class="form-control" rows="8" @bind="_csvContent" placeholder="Paste CSV content here (memo_number,memo_type,ticket_number,pnr,airline,reason_code,reason,amount,currency,status)"></textarea>
+            </div>
+            <button class="btn btn-primary" @onclick="ImportCsv">Import</button>
+            @if (!string.IsNullOrEmpty(_importMsg)) { <div class="alert alert-success" style="margin-top:8px;">@_importMsg</div> }
+        </div>
+    }
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_memos != null)
+    {
+        <table>
+            <thead><tr><th>Memo #</th><th>Type</th><th>Airline</th><th>Ticket</th><th>Booking</th><th>Reason</th><th>Amount</th><th>Status</th><th>Outcome</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var m in _memos)
+                {
+                    <tr>
+                        <td><strong>@m.MemoNumber</strong></td>
+                        <td><span class="badge @(m.MemoType == AgencyMemoType.Adm ? "badge-red" : "badge-green")">@m.MemoType</span></td>
+                        <td>@m.AirlineCode</td>
+                        <td>@(m.TicketNumber ?? "—")</td>
+                        <td>
+                            @if (string.IsNullOrEmpty(m.BookingReference))
+                            {
+                                <span class="missing-field">UNMATCHED</span>
+                            }
+                            else
+                            {
+                                @m.BookingReference
+                            }
+                        </td>
+                        <td>@m.ReasonCode</td>
+                        <td>@m.CurrencyCode @m.Amount.ToString("N2")</td>
+                        <td><span class="badge @StatusBadge(m.Status)">@m.Status</span></td>
+                        <td>@(m.Outcome?.ToString() ?? "—")</td>
+                        <td><a class="btn btn-outline" href="/agency-memos/@m.Id">Action</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<AgencyMemoDto>? _memos;
+    bool _loading = true, _showImport;
+    string _csvContent = "", _importMsg = "";
+    protected override async Task OnInitializedAsync() { _memos = await Api.GetAgencyMemosAsync(); _loading = false; }
+    async Task ImportCsv() { await Api.ImportBspMemosAsync(_csvContent); _memos = await Api.GetAgencyMemosAsync(); _importMsg = "Import complete."; }
+    static string StatusBadge(AgencyMemoStatus s) => s switch {
+        AgencyMemoStatus.Matched => "badge-green", AgencyMemoStatus.Unmatched => "badge-red",
+        AgencyMemoStatus.Disputed => "badge-yellow", AgencyMemoStatus.Settled => "badge-gray", _ => "badge-blue"
+    };
+}

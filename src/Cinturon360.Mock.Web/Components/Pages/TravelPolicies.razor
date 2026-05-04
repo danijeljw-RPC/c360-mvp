@@ -1,0 +1,44 @@
+@page "/travel-policies"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Travel Policies</h1>
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_policies != null)
+    {
+        <table>
+            <thead><tr><th>Code</th><th>Name</th><th>Client</th><th>Billing Behaviour</th><th>Payment Method</th></tr></thead>
+            <tbody>
+                @foreach (var p in _policies)
+                {
+                    <tr>
+                        <td><strong>@p.Code</strong></td>
+                        <td>@p.Name</td>
+                        <td>@p.ClientOrganisationName</td>
+                        <td><span class="badge @BehaviourBadge(p.BillingBehaviour)">@p.BillingBehaviour</span></td>
+                        <td>@(p.PaymentMethodLabel ?? "—")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<TravelPolicyDto>? _policies;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _policies = await Api.GetTravelPoliciesAsync(); _loading = false; }
+    static string BehaviourBadge(TravelPolicyBillingBehaviour b) => b switch {
+        TravelPolicyBillingBehaviour.UseSpecificPaymentMethod => "badge-blue",
+        TravelPolicyBillingBehaviour.ManualInvoice => "badge-yellow",
+        TravelPolicyBillingBehaviour.ExternalSettlement => "badge-purple",
+        TravelPolicyBillingBehaviour.ShadowBilling => "badge-gray",
+        _ => "badge-green"
+    };
+}

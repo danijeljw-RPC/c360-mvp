@@ -1,0 +1,3 @@
+ExternalId,Entity,TranDate,DueDate,Memo,Item,Quantity,Rate,Amount,TaxCode,Currency,Status
+INV-HWT-0001,Coca-Cola,2026-06-10,2026-06-24,Booking AVN123 - Jordan Nguyen SYD/MEL,TRAVEL_DOMESTIC,1,420.00,420.00,GST,AUD,Open
+INV-HWT-0001,Coca-Cola,2026-06-10,2026-06-24,Booking AVN123 - TMC booking fee,SERVICE_FEE,1,45.00,45.00,GST,AUD,Open

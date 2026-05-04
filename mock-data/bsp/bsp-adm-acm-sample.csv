@@ -1,0 +1,3 @@
+memo_number,memo_type,ticket_number,pnr,airline,reason_code,reason,amount,currency,status
+ADM-0001,ADM,0810000000001,C360A1,QF,FARE_RULE,Fare rule under-collection,85.00,AUD,New
+ACM-0002,ACM,6180000000002,C360B2,SQ,TAX_CORRECTION,Tax correction credit,-42.50,AUD,New

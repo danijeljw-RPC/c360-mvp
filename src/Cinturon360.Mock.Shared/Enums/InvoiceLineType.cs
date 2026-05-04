@@ -1,0 +1,2 @@
+namespace Cinturon360.Mock.Shared.Enums;
+public enum InvoiceLineType { SupplierFare = 1, SupplierDeposit = 2, SupplierBalance = 3, Tax = 4, BookingFee = 5, AmendmentFee = 6, CancellationFee = 7, RefundProcessingFee = 8, PolicyExceptionFee = 9, AfterHoursFee = 10, CardSurcharge = 11, PlatformUsageFee = 12, ReportingModuleFee = 13, GdsNdcTransactionFee = 14, CreditAdjustment = 15, AdmRecharge = 16, AcmCredit = 17 }

@@ -1,0 +1,48 @@
+@inherits LayoutComponentBase
+@inject SessionState Session
+@inject NavigationManager Nav
+
+<div class="layout-wrapper">
+    @if (Session.IsLoggedIn)
+    {
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <strong>Cinturon360</strong>
+                <small>Mid-Office Demo</small>
+            </div>
+            <div class="sidebar-user">
+                <small>@Session.UserEmail</small><br/>
+                <small class="text-muted">@Session.OrganisationName</small>
+            </div>
+            <ul class="nav-list">
+                <li><NavLink href="/" Match="NavLinkMatch.All">Dashboard</NavLink></li>
+                <li><NavLink href="/organisations">Organisation Hierarchy</NavLink></li>
+                <li><NavLink href="/billing-relationships">Billing Relationships</NavLink></li>
+                <li><NavLink href="/payment-methods">Payment Methods</NavLink></li>
+                <li><NavLink href="/travel-policies">Travel Policies</NavLink></li>
+                <li class="nav-divider">BOOKINGS</li>
+                <li><NavLink href="/imports">GDS Import</NavLink></li>
+                <li><NavLink href="/bookings">Bookings</NavLink></li>
+                <li class="nav-divider">FINANCE</li>
+                <li><NavLink href="/invoices">Invoices</NavLink></li>
+                <li><NavLink href="/ledger">Ledger</NavLink></li>
+                <li class="nav-divider">ADM/ACM</li>
+                <li><NavLink href="/agency-memos">ADM/ACM Workbench</NavLink></li>
+                <li class="nav-divider">REPORTING</li>
+                <li><NavLink href="/reports">Reports</NavLink></li>
+                <li><NavLink href="/finance-exports">Finance Exports</NavLink></li>
+                <li><NavLink href="/audit">Audit Log</NavLink></li>
+                <li class="nav-divider"></li>
+                <li><a href="/logout">Sign Out</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <div class="sim-banner">Provider actions are simulated only. No external payments are made. Cinturon360 owns billing logic, ledger and audit trail.</div>
+            @Body
+        </main>
+    }
+    else
+    {
+        @Body
+    }
+</div>

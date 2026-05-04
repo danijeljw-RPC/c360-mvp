@@ -1,0 +1,40 @@
+@page "/billing-relationships"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Billing Relationships</h1>
+    <div class="alert alert-info">Each relationship defines who is the seller (billing owner) and who is the buyer. The seller holds commercial risk unless explicitly noted otherwise.</div>
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_rels != null)
+    {
+        <table>
+            <thead><tr><th>Seller</th><th>Buyer</th><th>Billing Mode</th><th>Provider</th><th>Terms</th><th>Currency</th><th>Risk Held By Seller</th></tr></thead>
+            <tbody>
+                @foreach (var r in _rels)
+                {
+                    <tr>
+                        <td><strong>@r.SellerOrganisationName</strong></td>
+                        <td>@r.BuyerOrganisationName</td>
+                        <td><span class="badge badge-blue">@r.BillingMode</span></td>
+                        <td>@r.PaymentProviderType</td>
+                        <td>@r.PaymentTermsDays days</td>
+                        <td>@r.CurrencyCode</td>
+                        <td>@(r.IsCommercialRiskHeldBySeller ? "Yes" : "No")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<BillingRelationshipDto>? _rels;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _rels = await Api.GetBillingRelationshipsAsync(); _loading = false; }
+}

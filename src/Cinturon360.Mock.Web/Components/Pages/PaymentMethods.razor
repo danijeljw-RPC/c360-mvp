@@ -1,0 +1,51 @@
+@page "/payment-methods"
+@inject ApiClient Api
+@inject SessionState Session
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+@if (!Session.IsLoggedIn) { Nav.NavigateTo("/login"); return; }
+
+<div class="page-body">
+    <h1>Payment Methods</h1>
+    <div class="sim-note">Display metadata only. No real card data is stored. All payment operations are simulated.</div>
+
+    @if (_loading) { <p>Loading...</p> }
+    else if (_methods != null)
+    {
+        <table>
+            <thead><tr><th>Label</th><th>Buyer Organisation</th><th>Expires</th><th>Default</th></tr></thead>
+            <tbody>
+                @foreach (var m in _methods)
+                {
+                    <tr>
+                        <td><strong>@m.DisplayLabel</strong></td>
+                        <td>@m.BuyerOrganisationName</td>
+                        <td>@m.ExpiryMonth.ToString("D2")/@m.ExpiryYear</td>
+                        <td>@(m.IsDefault ? "Default" : "")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="card" style="margin-top:16px;">
+            <h2>Policy to Payment Method Mapping</h2>
+            <table>
+                <thead><tr><th>Policy</th><th>Payment Method</th></tr></thead>
+                <tbody>
+                    <tr><td>CCA-APAC</td><td>Mastercard ending 4444</td></tr>
+                    <tr><td>CCA-EMEA</td><td>Visa ending 1111 (fails first attempt, succeeds on retry)</td></tr>
+                    <tr><td>CCA-NA</td><td>Organisation default — American Express ending 8431</td></tr>
+                    <tr><td>CCA-EXEC</td><td>Manual Invoice (no card charge)</td></tr>
+                    <tr><td>CCA-TRIAL</td><td>Shadow Billing (no payment collected)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    List<PaymentMethodDto>? _methods;
+    bool _loading = true;
+    protected override async Task OnInitializedAsync() { _methods = await Api.GetPaymentMethodsAsync(); _loading = false; }
+}
