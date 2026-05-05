@@ -1,13 +1,9 @@
 mvp-dev.cinturon360.com {
-    bind 0.0.0.0 [::]
     tls /certs/cloudflare-origin.pem /certs/cloudflare-origin-key.pem
-
     reverse_proxy web:8080
 }
 
 mvp-dev-api.cinturon360.com {
-    bind 0.0.0.0 [::]
     tls /certs/cloudflare-origin.pem /certs/cloudflare-origin-key.pem
-
     reverse_proxy api:8090
 }
