@@ -1,11 +1,11 @@
-mvp.dev.cinturon360.com {
+mvp-dev.cinturon360.com {
     bind 0.0.0.0 [::]
     tls /certs/cloudflare-origin.pem /certs/cloudflare-origin-key.pem
 
     reverse_proxy web:8080
 }
 
-api.mvp.dev.cinturon360.com {
+mvp-dev-api.cinturon360.com {
     bind 0.0.0.0 [::]
     tls /certs/cloudflare-origin.pem /certs/cloudflare-origin-key.pem
 

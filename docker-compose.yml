@@ -37,7 +37,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
       ApiBaseUrl: http://api:8090
-      ApiPublicUrl: https://api.mvp.dev.cinturon360.com
+      ApiPublicUrl: https://mvp-dev-api.cinturon360.com
     depends_on:
       - api
 

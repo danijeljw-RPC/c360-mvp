@@ -339,7 +339,7 @@ Then open the UI at `http://192.168.1.50:5089`.
 
 ---
 
-### Environment 3 — Public internet with HTTPS via Caddy (mvp.dev.cinturon360.com)
+### Environment 3 — Public internet with HTTPS via Caddy (mvp-dev.cinturon360.com)
 
 This is the setup for deploying to a public server using `docker-compose.yml` (the default compose file). Caddy runs inside the Docker stack and handles TLS termination using Cloudflare Origin certificates.
 
@@ -356,9 +356,9 @@ There is no separate reverse proxy to install on the host — Caddy is a service
 
 | URL | Service |
 |---|---|
-| `https://mvp.dev.cinturon360.com` | Blazor web UI |
-| `https://api.mvp.dev.cinturon360.com` | REST API |
-| `https://api.mvp.dev.cinturon360.com/swagger` | Swagger UI (engineering) |
+| `https://mvp-dev.cinturon360.com` | Blazor web UI |
+| `https://mvp-dev-api.cinturon360.com` | REST API |
+| `https://mvp-dev-api.cinturon360.com/swagger` | Swagger UI (engineering) |
 
 Both subdomains must have DNS A records pointing to the server. Both use the same Cloudflare Origin certificate.
 
@@ -421,7 +421,7 @@ docker compose ps
 docker compose logs -f caddy web api
 ```
 
-The site will be available at `https://mvp.dev.cinturon360.com` once DNS resolves to the server and the stack is running.
+The site will be available at `https://mvp-dev.cinturon360.com` once DNS resolves to the server and the stack is running.
 
 #### Stopping and resetting
 
