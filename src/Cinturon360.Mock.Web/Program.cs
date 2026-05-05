@@ -26,6 +26,7 @@ builder.Services.AddScoped<SessionState>();
 
 var app = builder.Build();
 
+app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
