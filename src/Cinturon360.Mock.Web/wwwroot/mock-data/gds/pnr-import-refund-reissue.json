@@ -1,0 +1,32 @@
+{
+  "pnr": "C360H8",
+  "source": "MockAmadeus",
+  "client": "Coca-Cola",
+  "tmc": "HelloWorld Travel",
+  "traveller": {
+    "name": "Avery Williams",
+    "email": "avery.williams@example.test"
+  },
+  "policyCode": "CCA-EMEA",
+  "costCentre": "EMEA-MARKETING",
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "SYD",
+      "to": "DXB",
+      "depart": "2026-06-25T23:00:00+10:00",
+      "arrive": "2026-06-26T06:00:00+04:00",
+      "carrier": "EK",
+      "flight": "EK407"
+    }
+  ],
+  "ticket": {
+    "number": "1760000000008",
+    "fare": 1600.00,
+    "tax": 210.00,
+    "currency": "AUD"
+  },
+  "serviceFees": [{"code": "REFUND_PROCESSING_FEE", "amount": 55.0}],
+  "paymentScenario": "REFUND_REISSUE",
+  "refundNote": "Original ticket voided. Reissued on same route."
+}

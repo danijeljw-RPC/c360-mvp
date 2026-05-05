@@ -1,0 +1,1534 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinturon360 Mock Data Index</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #020617;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.24);
+      --accent: #38bdf8;
+      --accent-2: #f97316;
+      --code-bg: #020617;
+      --shadow: 0 18px 50px rgba(0,0,0,.32);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 34rem),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    code,
+    pre,
+    .pill,
+    .table td {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .container {
+      width: min(1480px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 32px 0 60px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(17, 24, 39, .95), rgba(2, 6, 23, .92));
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 780;
+    }
+
+    .brand .blue {
+      color: var(--accent);
+    }
+
+    .brand .orange {
+      color: var(--accent-2);
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 900px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, .72);
+      font-size: .85rem;
+    }
+
+    .badge strong {
+      color: white;
+      margin-right: 6px;
+    }
+
+    .actions,
+    .file-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, .85);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: .92rem;
+      cursor: pointer;
+      min-height: 42px;
+    }
+
+    .btn:hover {
+      border-color: rgba(56, 189, 248, .6);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(56, 189, 248, .22), rgba(249, 115, 22, .16));
+      border-color: rgba(56, 189, 248, .45);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 22px;
+      margin-top: 22px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(17, 24, 39, .9);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(2, 6, 23, .45);
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .search {
+      width: 100%;
+      margin-top: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel-2);
+      color: var(--text);
+      outline: none;
+    }
+
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px;
+    }
+
+    .tab {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      font-size: .95rem;
+    }
+
+    .tab:hover,
+    .tab.active {
+      background: rgba(56, 189, 248, .1);
+      border-color: rgba(56, 189, 248, .28);
+    }
+
+    .tab-count {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .category-panel {
+      display: none;
+      gap: 18px;
+    }
+
+    .category-panel.active {
+      display: grid;
+    }
+
+    .category-title {
+      margin: 0;
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(17, 24, 39, .88);
+      box-shadow: var(--shadow);
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .file-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(17, 24, 39, .92);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .file-card.hidden {
+      display: none;
+    }
+
+    .file-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(2, 6, 23, .38);
+    }
+
+    .file-title {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .file-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .78rem;
+      background: rgba(15, 23, 42, .7);
+      word-break: break-all;
+    }
+
+    details {
+      border-top: 1px solid var(--border);
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 20px;
+      font-weight: 650;
+      background: rgba(15, 23, 42, .56);
+    }
+
+    summary:hover {
+      background: rgba(56, 189, 248, .08);
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px 20px;
+      max-height: 520px;
+      overflow: auto;
+      background: var(--code-bg);
+      color: #dbeafe;
+      font-size: .87rem;
+      line-height: 1.55;
+      tab-size: 2;
+    }
+
+    .csv-table-wrap {
+      max-height: 520px;
+      overflow: auto;
+      background: var(--code-bg);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      padding: 9px 11px;
+      border-bottom: 1px solid rgba(148, 163, 184, .16);
+      text-align: left;
+      vertical-align: top;
+      font-size: .88rem;
+    }
+
+    .table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #0b1220;
+      color: #f8fafc;
+      white-space: nowrap;
+    }
+
+    .table td {
+      color: #dbeafe;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background: rgba(148, 163, 184, .055);
+    }
+
+    .empty {
+      padding: 28px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+      background: rgba(17, 24, 39, .55);
+    }
+
+    .footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: .85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .layout,
+      .file-header {
+        grid-template-columns: 1fr;
+      }
+
+      .actions,
+      .file-actions {
+        justify-content: flex-start;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .tabs {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .tab {
+        min-width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div>
+        <h1 class="brand"><span class="blue">Cinturon</span><span class="orange">360</span> Mock Data</h1>
+        <p class="subtitle">
+          Self-contained demo index for mock data files under <code>/mock-data</code>.
+          File previews are embedded directly into this HTML file.
+        </p>
+
+        <div class="badge-row">
+          <span class="badge"><strong>15</strong> files</span>
+          <span class="badge"><strong>4</strong> categories</span>
+          <span class="badge"><strong>10</strong> JSON</span>
+          <span class="badge"><strong>5</strong> CSV</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="button" onclick="expandAll()">Expand all</button>
+        <button class="btn" type="button" onclick="collapseAll()">Collapse all</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Categories</h2>
+          <input id="searchBox" class="search" type="search" placeholder="Filter files..." autocomplete="off">
+        </div>
+
+        <nav class="tabs" aria-label="Mock data category tabs">
+          <button class="tab active" type="button" data-tab="bsp">
+            <span>bsp</span>
+            <span class="tab-count">2</span>
+          </button>
+          <button class="tab" type="button" data-tab="finance">
+            <span>finance</span>
+            <span class="tab-count">3</span>
+          </button>
+          <button class="tab" type="button" data-tab="gds">
+            <span>gds</span>
+            <span class="tab-count">8</span>
+          </button>
+          <button class="tab" type="button" data-tab="payments">
+            <span>payments</span>
+            <span class="tab-count">2</span>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="category-panel active" data-panel="bsp">
+          <h2 class="category-title">bsp</h2>
+          <article class="file-card" data-file-card data-search="bsp/bsp-adm-acm-sample.csv /mock-data/bsp/bsp-adm-acm-sample.csv">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-bsp-bsp-adm-acm-sample-csv">bsp/bsp-adm-acm-sample.csv</h3>
+                <div class="file-meta">
+                  <span class="pill">CSV</span>
+                  <span class="pill">path: bsp/bsp-adm-acm-sample.csv</span>
+                  <span class="pill">url: /mock-data/bsp/bsp-adm-acm-sample.csv</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/bsp/bsp-adm-acm-sample.csv" download>Download</a>
+                <a class="btn" href="/mock-data/bsp/bsp-adm-acm-sample.csv" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-bsp-bsp-adm-acm-sample-csv-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>CSV table view</summary>
+              <div class="csv-table-wrap">
+<table class="table csv-table">
+<thead><tr>
+<th>memo_number</th>
+<th>memo_type</th>
+<th>ticket_number</th>
+<th>pnr</th>
+<th>airline</th>
+<th>reason_code</th>
+<th>reason</th>
+<th>amount</th>
+<th>currency</th>
+<th>status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ADM-0001</td>
+<td>ADM</td>
+<td>0810000000001</td>
+<td>C360A1</td>
+<td>QF</td>
+<td>FARE_RULE</td>
+<td>Fare rule under-collection</td>
+<td>85.00</td>
+<td>AUD</td>
+<td>New</td>
+</tr>
+<tr>
+<td>ACM-0002</td>
+<td>ACM</td>
+<td>6180000000002</td>
+<td>C360B2</td>
+<td>SQ</td>
+<td>TAX_CORRECTION</td>
+<td>Tax correction credit</td>
+<td>-42.50</td>
+<td>AUD</td>
+<td>New</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </details>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-bsp-bsp-adm-acm-sample-csv-content"><code>memo_number,memo_type,ticket_number,pnr,airline,reason_code,reason,amount,currency,status
+ADM-0001,ADM,0810000000001,C360A1,QF,FARE_RULE,Fare rule under-collection,85.00,AUD,New
+ACM-0002,ACM,6180000000002,C360B2,SQ,TAX_CORRECTION,Tax correction credit,-42.50,AUD,New
+</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="bsp/bsp-ticket-reconciliation-sample.csv /mock-data/bsp/bsp-ticket-reconciliation-sample.csv">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-bsp-bsp-ticket-reconciliation-sample-csv">bsp/bsp-ticket-reconciliation-sample.csv</h3>
+                <div class="file-meta">
+                  <span class="pill">CSV</span>
+                  <span class="pill">path: bsp/bsp-ticket-reconciliation-sample.csv</span>
+                  <span class="pill">url: /mock-data/bsp/bsp-ticket-reconciliation-sample.csv</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/bsp/bsp-ticket-reconciliation-sample.csv" download>Download</a>
+                <a class="btn" href="/mock-data/bsp/bsp-ticket-reconciliation-sample.csv" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-bsp-bsp-ticket-reconciliation-sample-csv-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>CSV table view</summary>
+              <div class="csv-table-wrap">
+<table class="table csv-table">
+<thead><tr>
+<th>ticket_number</th>
+<th>pnr</th>
+<th>airline</th>
+<th>fare</th>
+<th>tax</th>
+<th>commission</th>
+<th>total</th>
+<th>currency</th>
+<th>status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0810000000001</td>
+<td>C360A1</td>
+<td>QF</td>
+<td>420.00</td>
+<td>66.40</td>
+<td>0.00</td>
+<td>486.40</td>
+<td>AUD</td>
+<td>Matched</td>
+</tr>
+<tr>
+<td>6180000000002</td>
+<td>C360B2</td>
+<td>SQ</td>
+<td>1800.00</td>
+<td>310.55</td>
+<td>0.00</td>
+<td>2110.55</td>
+<td>AUD</td>
+<td>Review</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </details>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-bsp-bsp-ticket-reconciliation-sample-csv-content"><code>ticket_number,pnr,airline,fare,tax,commission,total,currency,status
+0810000000001,C360A1,QF,420.00,66.40,0.00,486.40,AUD,Matched
+6180000000002,C360B2,SQ,1800.00,310.55,0.00,2110.55,AUD,Review
+</code></pre>
+            </details>
+          </article>
+        </section>
+        <section class="category-panel" data-panel="finance">
+          <h2 class="category-title">finance</h2>
+          <article class="file-card" data-file-card data-search="finance/generic-ledger-export-sample.csv /mock-data/finance/generic-ledger-export-sample.csv">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-finance-generic-ledger-export-sample-csv">finance/generic-ledger-export-sample.csv</h3>
+                <div class="file-meta">
+                  <span class="pill">CSV</span>
+                  <span class="pill">path: finance/generic-ledger-export-sample.csv</span>
+                  <span class="pill">url: /mock-data/finance/generic-ledger-export-sample.csv</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/finance/generic-ledger-export-sample.csv" download>Download</a>
+                <a class="btn" href="/mock-data/finance/generic-ledger-export-sample.csv" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-finance-generic-ledger-export-sample-csv-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>CSV table view</summary>
+              <div class="csv-table-wrap">
+<table class="table csv-table">
+<thead><tr>
+<th>invoice_number</th>
+<th>seller</th>
+<th>buyer</th>
+<th>line_code</th>
+<th>description</th>
+<th>amount</th>
+<th>tax</th>
+<th>currency</th>
+<th>external_status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>INV-HWT-0001</td>
+<td>HelloWorld Travel</td>
+<td>Coca-Cola</td>
+<td>AIRFARE</td>
+<td>SYD-MEL airfare</td>
+<td>420.00</td>
+<td>66.40</td>
+<td>AUD</td>
+<td>ReadyToExport</td>
+</tr>
+<tr>
+<td>INV-HWT-0001</td>
+<td>HelloWorld Travel</td>
+<td>Coca-Cola</td>
+<td>BOOKING_FEE</td>
+<td>Domestic booking fee</td>
+<td>45.00</td>
+<td>4.50</td>
+<td>AUD</td>
+<td>ReadyToExport</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </details>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-finance-generic-ledger-export-sample-csv-content"><code>invoice_number,seller,buyer,line_code,description,amount,tax,currency,external_status
+INV-HWT-0001,HelloWorld Travel,Coca-Cola,AIRFARE,SYD-MEL airfare,420.00,66.40,AUD,ReadyToExport
+INV-HWT-0001,HelloWorld Travel,Coca-Cola,BOOKING_FEE,Domestic booking fee,45.00,4.50,AUD,ReadyToExport
+</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="finance/netsuite-export-sample.csv /mock-data/finance/netsuite-export-sample.csv">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-finance-netsuite-export-sample-csv">finance/netsuite-export-sample.csv</h3>
+                <div class="file-meta">
+                  <span class="pill">CSV</span>
+                  <span class="pill">path: finance/netsuite-export-sample.csv</span>
+                  <span class="pill">url: /mock-data/finance/netsuite-export-sample.csv</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/finance/netsuite-export-sample.csv" download>Download</a>
+                <a class="btn" href="/mock-data/finance/netsuite-export-sample.csv" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-finance-netsuite-export-sample-csv-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>CSV table view</summary>
+              <div class="csv-table-wrap">
+<table class="table csv-table">
+<thead><tr>
+<th>ExternalId</th>
+<th>Entity</th>
+<th>TranDate</th>
+<th>DueDate</th>
+<th>Memo</th>
+<th>Item</th>
+<th>Quantity</th>
+<th>Rate</th>
+<th>Amount</th>
+<th>TaxCode</th>
+<th>Currency</th>
+<th>Status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>INV-HWT-0001</td>
+<td>Coca-Cola</td>
+<td>2026-06-10</td>
+<td>2026-06-24</td>
+<td>Booking AVN123 - Jordan Nguyen SYD/MEL</td>
+<td>TRAVEL_DOMESTIC</td>
+<td>1</td>
+<td>420.00</td>
+<td>420.00</td>
+<td>GST</td>
+<td>AUD</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>INV-HWT-0001</td>
+<td>Coca-Cola</td>
+<td>2026-06-10</td>
+<td>2026-06-24</td>
+<td>Booking AVN123 - TMC booking fee</td>
+<td>SERVICE_FEE</td>
+<td>1</td>
+<td>45.00</td>
+<td>45.00</td>
+<td>GST</td>
+<td>AUD</td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </details>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-finance-netsuite-export-sample-csv-content"><code>ExternalId,Entity,TranDate,DueDate,Memo,Item,Quantity,Rate,Amount,TaxCode,Currency,Status
+INV-HWT-0001,Coca-Cola,2026-06-10,2026-06-24,Booking AVN123 - Jordan Nguyen SYD/MEL,TRAVEL_DOMESTIC,1,420.00,420.00,GST,AUD,Open
+INV-HWT-0001,Coca-Cola,2026-06-10,2026-06-24,Booking AVN123 - TMC booking fee,SERVICE_FEE,1,45.00,45.00,GST,AUD,Open
+</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="finance/xero-export-sample.csv /mock-data/finance/xero-export-sample.csv">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-finance-xero-export-sample-csv">finance/xero-export-sample.csv</h3>
+                <div class="file-meta">
+                  <span class="pill">CSV</span>
+                  <span class="pill">path: finance/xero-export-sample.csv</span>
+                  <span class="pill">url: /mock-data/finance/xero-export-sample.csv</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/finance/xero-export-sample.csv" download>Download</a>
+                <a class="btn" href="/mock-data/finance/xero-export-sample.csv" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-finance-xero-export-sample-csv-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>CSV table view</summary>
+              <div class="csv-table-wrap">
+<table class="table csv-table">
+<thead><tr>
+<th>ContactName</th>
+<th>EmailAddress</th>
+<th>POAddressLine1</th>
+<th>City</th>
+<th>Region</th>
+<th>PostalCode</th>
+<th>Country</th>
+<th>InvoiceNumber</th>
+<th>InvoiceDate</th>
+<th>DueDate</th>
+<th>Description</th>
+<th>Quantity</th>
+<th>UnitAmount</th>
+<th>TaxType</th>
+<th>TaxAmount</th>
+<th>AccountCode</th>
+<th>Currency</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>HelloWorld Travel</td>
+<td>finance@helloworld.example</td>
+<td>123 Travel Street</td>
+<td>Sydney</td>
+<td>NSW</td>
+<td>2000</td>
+<td>AU</td>
+<td>INV-HWT-0001</td>
+<td>2026-06-10</td>
+<td>2026-06-24</td>
+<td>Domestic flight SYD/MEL - Jordan Nguyen</td>
+<td>1</td>
+<td>420.00</td>
+<td>GST on Income</td>
+<td>42.00</td>
+<td>200</td>
+<td>AUD</td>
+</tr>
+<tr>
+<td>HelloWorld Travel</td>
+<td>finance@helloworld.example</td>
+<td>123 Travel Street</td>
+<td>Sydney</td>
+<td>NSW</td>
+<td>2000</td>
+<td>AU</td>
+<td>INV-HWT-0001</td>
+<td>2026-06-10</td>
+<td>2026-06-24</td>
+<td>TMC booking fee</td>
+<td>1</td>
+<td>45.00</td>
+<td>GST on Income</td>
+<td>4.50</td>
+<td>200</td>
+<td>AUD</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </details>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-finance-xero-export-sample-csv-content"><code>ContactName,EmailAddress,POAddressLine1,City,Region,PostalCode,Country,InvoiceNumber,InvoiceDate,DueDate,Description,Quantity,UnitAmount,TaxType,TaxAmount,AccountCode,Currency
+HelloWorld Travel,finance@helloworld.example,123 Travel Street,Sydney,NSW,2000,AU,INV-HWT-0001,2026-06-10,2026-06-24,Domestic flight SYD/MEL - Jordan Nguyen,1,420.00,GST on Income,42.00,200,AUD
+HelloWorld Travel,finance@helloworld.example,123 Travel Street,Sydney,NSW,2000,AU,INV-HWT-0001,2026-06-10,2026-06-24,TMC booking fee,1,45.00,GST on Income,4.50,200,AUD
+</code></pre>
+            </details>
+          </article>
+        </section>
+        <section class="category-panel" data-panel="gds">
+          <h2 class="category-title">gds</h2>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-complete.json /mock-data/gds/pnr-import-complete.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-complete-json">gds/pnr-import-complete.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-complete.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-complete.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-complete.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-complete.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-complete-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-complete-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360A1&quot;,
+  &quot;source&quot;: &quot;Mock Amadeus&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;tmc&quot;: &quot;HelloWorld Travel&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Alex Chen&quot;,
+    &quot;email&quot;: &quot;alex.chen@coca-cola.example&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-APAC&quot;,
+  &quot;costCentre&quot;: &quot;APAC-SALES-001&quot;,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;SYD&quot;,
+      &quot;to&quot;: &quot;MEL&quot;,
+      &quot;depart&quot;: &quot;2026-06-15T09:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-06-15T10:35:00+10:00&quot;,
+      &quot;carrier&quot;: &quot;QF&quot;,
+      &quot;flight&quot;: &quot;QF401&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;0810000000001&quot;,
+    &quot;fare&quot;: 420.0,
+    &quot;tax&quot;: 66.4,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;BOOKING_FEE&quot;,
+      &quot;amount&quot;: 45.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;IMMEDIATE_SUCCESS&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-external-settlement.json /mock-data/gds/pnr-import-external-settlement.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-external-settlement-json">gds/pnr-import-external-settlement.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-external-settlement.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-external-settlement.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-external-settlement.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-external-settlement.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-external-settlement-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-external-settlement-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360F6&quot;,
+  &quot;source&quot;: &quot;MockSabre&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;tmc&quot;: &quot;HelloWorld Travel&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Morgan Patel&quot;,
+    &quot;email&quot;: &quot;morgan.patel@example.test&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-NA&quot;,
+  &quot;costCentre&quot;: &quot;NA-FINANCE&quot;,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;SYD&quot;,
+      &quot;to&quot;: &quot;LAX&quot;,
+      &quot;depart&quot;: &quot;2026-10-15T14:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-10-15T09:30:00-07:00&quot;,
+      &quot;carrier&quot;: &quot;QF&quot;,
+      &quot;flight&quot;: &quot;QF11&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;0810000000006&quot;,
+    &quot;fare&quot;: 2800.0,
+    &quot;tax&quot;: 430.0,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;INTERNATIONAL_BOOKING_FEE&quot;,
+      &quot;amount&quot;: 95.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;EXTERNAL_SETTLEMENT&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-manual-invoice.json /mock-data/gds/pnr-import-manual-invoice.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-manual-invoice-json">gds/pnr-import-manual-invoice.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-manual-invoice.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-manual-invoice.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-manual-invoice.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-manual-invoice.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-manual-invoice-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-manual-invoice-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360E5&quot;,
+  &quot;source&quot;: &quot;MockAmadeus&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;tmc&quot;: &quot;HelloWorld Travel&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Taylor Chen&quot;,
+    &quot;email&quot;: &quot;taylor.chen@example.test&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-EXEC&quot;,
+  &quot;costCentre&quot;: &quot;EXEC&quot;,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;SYD&quot;,
+      &quot;to&quot;: &quot;SIN&quot;,
+      &quot;depart&quot;: &quot;2026-09-05T08:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-09-05T13:40:00+08:00&quot;,
+      &quot;carrier&quot;: &quot;SQ&quot;,
+      &quot;flight&quot;: &quot;SQ221&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;6180000000005&quot;,
+    &quot;fare&quot;: 3200.0,
+    &quot;tax&quot;: 390.0,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;INTERNATIONAL_BOOKING_FEE&quot;,
+      &quot;amount&quot;: 95.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;MANUAL_INVOICE&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-missing-cost-centre.json /mock-data/gds/pnr-import-missing-cost-centre.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-missing-cost-centre-json">gds/pnr-import-missing-cost-centre.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-missing-cost-centre.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-missing-cost-centre.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-missing-cost-centre.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-missing-cost-centre.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-missing-cost-centre-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-missing-cost-centre-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360B2&quot;,
+  &quot;source&quot;: &quot;Mock Sabre&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Priya Singh&quot;,
+    &quot;email&quot;: &quot;priya.singh@coca-cola.example&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-EMEA&quot;,
+  &quot;costCentre&quot;: null,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;SYD&quot;,
+      &quot;to&quot;: &quot;SIN&quot;,
+      &quot;depart&quot;: &quot;2026-07-02T12:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-07-02T18:20:00+08:00&quot;,
+      &quot;carrier&quot;: &quot;SQ&quot;,
+      &quot;flight&quot;: &quot;SQ222&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;6180000000002&quot;,
+    &quot;fare&quot;: 1800.0,
+    &quot;tax&quot;: 310.55,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;INTERNATIONAL_BOOKING_FEE&quot;,
+      &quot;amount&quot;: 95.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;INCOMPLETE_BLOCKED&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-package-deposit.json /mock-data/gds/pnr-import-package-deposit.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-package-deposit-json">gds/pnr-import-package-deposit.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-package-deposit.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-package-deposit.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-package-deposit.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-package-deposit.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-package-deposit-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-package-deposit-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360C3&quot;,
+  &quot;source&quot;: &quot;Mock Offline Package&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Morgan Lee&quot;,
+    &quot;email&quot;: &quot;morgan.lee@coca-cola.example&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-NA&quot;,
+  &quot;costCentre&quot;: &quot;NA-MARKETING-010&quot;,
+  &quot;package&quot;: {
+    &quot;total&quot;: 5000.0,
+    &quot;deposit&quot;: 1000.0,
+    &quot;serviceFee&quot;: 150.0,
+    &quot;balance&quot;: 4000.0,
+    &quot;balanceDueDaysBeforeDeparture&quot;: 30,
+    &quot;departureDate&quot;: &quot;2026-09-01&quot;
+  },
+  &quot;paymentScenario&quot;: &quot;DEPOSIT_NOW_BALANCE_LATER&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-payment-failure.json /mock-data/gds/pnr-import-payment-failure.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-payment-failure-json">gds/pnr-import-payment-failure.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-payment-failure.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-payment-failure.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-payment-failure.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-payment-failure.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-payment-failure-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-payment-failure-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360D4&quot;,
+  &quot;source&quot;: &quot;MockAmadeus&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;tmc&quot;: &quot;HelloWorld Travel&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Avery Williams&quot;,
+    &quot;email&quot;: &quot;avery.williams@example.test&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-EMEA&quot;,
+  &quot;costCentre&quot;: &quot;EMEA-MARKETING&quot;,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;SYD&quot;,
+      &quot;to&quot;: &quot;LHR&quot;,
+      &quot;depart&quot;: &quot;2026-08-10T22:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-08-11T05:30:00+00:00&quot;,
+      &quot;carrier&quot;: &quot;BA&quot;,
+      &quot;flight&quot;: &quot;BA16&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;1250000000004&quot;,
+    &quot;fare&quot;: 1950.0,
+    &quot;tax&quot;: 285.6,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;INTERNATIONAL_BOOKING_FEE&quot;,
+      &quot;amount&quot;: 95.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;PAYMENT_FAIL_THEN_RETRY&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-refund-reissue.json /mock-data/gds/pnr-import-refund-reissue.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-refund-reissue-json">gds/pnr-import-refund-reissue.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-refund-reissue.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-refund-reissue.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-refund-reissue.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-refund-reissue.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-refund-reissue-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-refund-reissue-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360H8&quot;,
+  &quot;source&quot;: &quot;MockAmadeus&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;tmc&quot;: &quot;HelloWorld Travel&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Avery Williams&quot;,
+    &quot;email&quot;: &quot;avery.williams@example.test&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-EMEA&quot;,
+  &quot;costCentre&quot;: &quot;EMEA-MARKETING&quot;,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;SYD&quot;,
+      &quot;to&quot;: &quot;DXB&quot;,
+      &quot;depart&quot;: &quot;2026-06-25T23:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-06-26T06:00:00+04:00&quot;,
+      &quot;carrier&quot;: &quot;EK&quot;,
+      &quot;flight&quot;: &quot;EK407&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;1760000000008&quot;,
+    &quot;fare&quot;: 1600.0,
+    &quot;tax&quot;: 210.0,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;REFUND_PROCESSING_FEE&quot;,
+      &quot;amount&quot;: 55.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;REFUND_REISSUE&quot;,
+  &quot;refundNote&quot;: &quot;Original ticket voided. Reissued on same route.&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="gds/pnr-import-shadow-billing.json /mock-data/gds/pnr-import-shadow-billing.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-gds-pnr-import-shadow-billing-json">gds/pnr-import-shadow-billing.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: gds/pnr-import-shadow-billing.json</span>
+                  <span class="pill">url: /mock-data/gds/pnr-import-shadow-billing.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/gds/pnr-import-shadow-billing.json" download>Download</a>
+                <a class="btn" href="/mock-data/gds/pnr-import-shadow-billing.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-gds-pnr-import-shadow-billing-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-gds-pnr-import-shadow-billing-json-content"><code>{
+  &quot;pnr&quot;: &quot;C360G7&quot;,
+  &quot;source&quot;: &quot;MockAmadeus&quot;,
+  &quot;client&quot;: &quot;Coca-Cola&quot;,
+  &quot;tmc&quot;: &quot;HelloWorld Travel&quot;,
+  &quot;traveller&quot;: {
+    &quot;name&quot;: &quot;Jordan Nguyen&quot;,
+    &quot;email&quot;: &quot;jordan.nguyen@example.test&quot;
+  },
+  &quot;policyCode&quot;: &quot;CCA-TRIAL&quot;,
+  &quot;costCentre&quot;: &quot;APAC-SALES&quot;,
+  &quot;segments&quot;: [
+    {
+      &quot;type&quot;: &quot;AIR&quot;,
+      &quot;from&quot;: &quot;MEL&quot;,
+      &quot;to&quot;: &quot;BNE&quot;,
+      &quot;depart&quot;: &quot;2026-07-20T11:00:00+10:00&quot;,
+      &quot;arrive&quot;: &quot;2026-07-20T12:30:00+10:00&quot;,
+      &quot;carrier&quot;: &quot;QF&quot;,
+      &quot;flight&quot;: &quot;QF500&quot;
+    }
+  ],
+  &quot;ticket&quot;: {
+    &quot;number&quot;: &quot;0810000000007&quot;,
+    &quot;fare&quot;: 280.0,
+    &quot;tax&quot;: 42.0,
+    &quot;currency&quot;: &quot;AUD&quot;
+  },
+  &quot;serviceFees&quot;: [
+    {
+      &quot;code&quot;: &quot;BOOKING_FEE&quot;,
+      &quot;amount&quot;: 45.0
+    }
+  ],
+  &quot;paymentScenario&quot;: &quot;SHADOW_BILLING&quot;
+}</code></pre>
+            </details>
+          </article>
+        </section>
+        <section class="category-panel" data-panel="payments">
+          <h2 class="category-title">payments</h2>
+          <article class="file-card" data-file-card data-search="payments/stripe-webhook-payment-failed.json /mock-data/payments/stripe-webhook-payment-failed.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-payments-stripe-webhook-payment-failed-json">payments/stripe-webhook-payment-failed.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: payments/stripe-webhook-payment-failed.json</span>
+                  <span class="pill">url: /mock-data/payments/stripe-webhook-payment-failed.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/payments/stripe-webhook-payment-failed.json" download>Download</a>
+                <a class="btn" href="/mock-data/payments/stripe-webhook-payment-failed.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-payments-stripe-webhook-payment-failed-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-payments-stripe-webhook-payment-failed-json-content"><code>{
+  &quot;provider&quot;: &quot;Stripe&quot;,
+  &quot;eventType&quot;: &quot;payment_intent.payment_failed&quot;,
+  &quot;mock&quot;: true,
+  &quot;invoiceNumber&quot;: &quot;INV-HWT-0002&quot;,
+  &quot;amount&quot;: 2205.55,
+  &quot;currency&quot;: &quot;AUD&quot;,
+  &quot;failureCode&quot;: &quot;insufficient_funds&quot;,
+  &quot;paymentMethod&quot;: &quot;pm_mock_mastercard_4444&quot;
+}</code></pre>
+            </details>
+          </article>
+          <article class="file-card" data-file-card data-search="payments/stripe-webhook-payment-succeeded.json /mock-data/payments/stripe-webhook-payment-succeeded.json">
+            <header class="file-header">
+              <div>
+                <h3 class="file-title" id="file-payments-stripe-webhook-payment-succeeded-json">payments/stripe-webhook-payment-succeeded.json</h3>
+                <div class="file-meta">
+                  <span class="pill">JSON</span>
+                  <span class="pill">path: payments/stripe-webhook-payment-succeeded.json</span>
+                  <span class="pill">url: /mock-data/payments/stripe-webhook-payment-succeeded.json</span>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <a class="btn btn-primary" href="/mock-data/payments/stripe-webhook-payment-succeeded.json" download>Download</a>
+                <a class="btn" href="/mock-data/payments/stripe-webhook-payment-succeeded.json" target="_blank" rel="noopener">Open</a>
+                <button class="btn" type="button" onclick="copyText('file-payments-stripe-webhook-payment-succeeded-json-content')">Copy</button>
+              </div>
+            </header>
+            <details open>
+              <summary>Raw embedded content</summary>
+              <pre id="file-payments-stripe-webhook-payment-succeeded-json-content"><code>{
+  &quot;provider&quot;: &quot;Stripe&quot;,
+  &quot;eventType&quot;: &quot;payment_intent.succeeded&quot;,
+  &quot;mock&quot;: true,
+  &quot;invoiceNumber&quot;: &quot;INV-HWT-0001&quot;,
+  &quot;amount&quot;: 535.9,
+  &quot;currency&quot;: &quot;AUD&quot;,
+  &quot;paymentMethod&quot;: &quot;pm_mock_amex_8431&quot;
+}</code></pre>
+            </details>
+          </article>
+        </section>
+        <div id="emptyState" class="empty" style="display:none;">
+          No mock data files match the current filter.
+        </div>
+      </main>
+    </section>
+
+    <div class="footer">
+      Generated index.html is self-contained. It does not include absolute local source paths.
+    </div>
+  </div>
+
+  <script type="application/json" id="mock-data-index">
+[
+  {
+    &quot;category&quot;: &quot;bsp&quot;,
+    &quot;relativePath&quot;: &quot;bsp/bsp-adm-acm-sample.csv&quot;,
+    &quot;fileName&quot;: &quot;bsp-adm-acm-sample.csv&quot;,
+    &quot;extension&quot;: &quot;csv&quot;,
+    &quot;url&quot;: &quot;/mock-data/bsp/bsp-adm-acm-sample.csv&quot;,
+    &quot;content&quot;: &quot;memo_number,memo_type,ticket_number,pnr,airline,reason_code,reason,amount,currency,status\nADM-0001,ADM,0810000000001,C360A1,QF,FARE_RULE,Fare rule under-collection,85.00,AUD,New\nACM-0002,ACM,6180000000002,C360B2,SQ,TAX_CORRECTION,Tax correction credit,-42.50,AUD,New\n&quot;
+  },
+  {
+    &quot;category&quot;: &quot;bsp&quot;,
+    &quot;relativePath&quot;: &quot;bsp/bsp-ticket-reconciliation-sample.csv&quot;,
+    &quot;fileName&quot;: &quot;bsp-ticket-reconciliation-sample.csv&quot;,
+    &quot;extension&quot;: &quot;csv&quot;,
+    &quot;url&quot;: &quot;/mock-data/bsp/bsp-ticket-reconciliation-sample.csv&quot;,
+    &quot;content&quot;: &quot;ticket_number,pnr,airline,fare,tax,commission,total,currency,status\n0810000000001,C360A1,QF,420.00,66.40,0.00,486.40,AUD,Matched\n6180000000002,C360B2,SQ,1800.00,310.55,0.00,2110.55,AUD,Review\n&quot;
+  },
+  {
+    &quot;category&quot;: &quot;finance&quot;,
+    &quot;relativePath&quot;: &quot;finance/generic-ledger-export-sample.csv&quot;,
+    &quot;fileName&quot;: &quot;generic-ledger-export-sample.csv&quot;,
+    &quot;extension&quot;: &quot;csv&quot;,
+    &quot;url&quot;: &quot;/mock-data/finance/generic-ledger-export-sample.csv&quot;,
+    &quot;content&quot;: &quot;invoice_number,seller,buyer,line_code,description,amount,tax,currency,external_status\nINV-HWT-0001,HelloWorld Travel,Coca-Cola,AIRFARE,SYD-MEL airfare,420.00,66.40,AUD,ReadyToExport\nINV-HWT-0001,HelloWorld Travel,Coca-Cola,BOOKING_FEE,Domestic booking fee,45.00,4.50,AUD,ReadyToExport\n&quot;
+  },
+  {
+    &quot;category&quot;: &quot;finance&quot;,
+    &quot;relativePath&quot;: &quot;finance/netsuite-export-sample.csv&quot;,
+    &quot;fileName&quot;: &quot;netsuite-export-sample.csv&quot;,
+    &quot;extension&quot;: &quot;csv&quot;,
+    &quot;url&quot;: &quot;/mock-data/finance/netsuite-export-sample.csv&quot;,
+    &quot;content&quot;: &quot;ExternalId,Entity,TranDate,DueDate,Memo,Item,Quantity,Rate,Amount,TaxCode,Currency,Status\nINV-HWT-0001,Coca-Cola,2026-06-10,2026-06-24,Booking AVN123 - Jordan Nguyen SYD/MEL,TRAVEL_DOMESTIC,1,420.00,420.00,GST,AUD,Open\nINV-HWT-0001,Coca-Cola,2026-06-10,2026-06-24,Booking AVN123 - TMC booking fee,SERVICE_FEE,1,45.00,45.00,GST,AUD,Open\n&quot;
+  },
+  {
+    &quot;category&quot;: &quot;finance&quot;,
+    &quot;relativePath&quot;: &quot;finance/xero-export-sample.csv&quot;,
+    &quot;fileName&quot;: &quot;xero-export-sample.csv&quot;,
+    &quot;extension&quot;: &quot;csv&quot;,
+    &quot;url&quot;: &quot;/mock-data/finance/xero-export-sample.csv&quot;,
+    &quot;content&quot;: &quot;ContactName,EmailAddress,POAddressLine1,City,Region,PostalCode,Country,InvoiceNumber,InvoiceDate,DueDate,Description,Quantity,UnitAmount,TaxType,TaxAmount,AccountCode,Currency\nHelloWorld Travel,finance@helloworld.example,123 Travel Street,Sydney,NSW,2000,AU,INV-HWT-0001,2026-06-10,2026-06-24,Domestic flight SYD/MEL - Jordan Nguyen,1,420.00,GST on Income,42.00,200,AUD\nHelloWorld Travel,finance@helloworld.example,123 Travel Street,Sydney,NSW,2000,AU,INV-HWT-0001,2026-06-10,2026-06-24,TMC booking fee,1,45.00,GST on Income,4.50,200,AUD\n&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-complete.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-complete.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-complete.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360A1\&quot;,\n  \&quot;source\&quot;: \&quot;Mock Amadeus\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;tmc\&quot;: \&quot;HelloWorld Travel\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Alex Chen\&quot;,\n    \&quot;email\&quot;: \&quot;alex.chen@coca-cola.example\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-APAC\&quot;,\n  \&quot;costCentre\&quot;: \&quot;APAC-SALES-001\&quot;,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;SYD\&quot;,\n      \&quot;to\&quot;: \&quot;MEL\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-06-15T09:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-06-15T10:35:00+10:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;QF\&quot;,\n      \&quot;flight\&quot;: \&quot;QF401\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;0810000000001\&quot;,\n    \&quot;fare\&quot;: 420.0,\n    \&quot;tax\&quot;: 66.4,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;BOOKING_FEE\&quot;,\n      \&quot;amount\&quot;: 45.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;IMMEDIATE_SUCCESS\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-external-settlement.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-external-settlement.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-external-settlement.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360F6\&quot;,\n  \&quot;source\&quot;: \&quot;MockSabre\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;tmc\&quot;: \&quot;HelloWorld Travel\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Morgan Patel\&quot;,\n    \&quot;email\&quot;: \&quot;morgan.patel@example.test\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-NA\&quot;,\n  \&quot;costCentre\&quot;: \&quot;NA-FINANCE\&quot;,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;SYD\&quot;,\n      \&quot;to\&quot;: \&quot;LAX\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-10-15T14:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-10-15T09:30:00-07:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;QF\&quot;,\n      \&quot;flight\&quot;: \&quot;QF11\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;0810000000006\&quot;,\n    \&quot;fare\&quot;: 2800.0,\n    \&quot;tax\&quot;: 430.0,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;INTERNATIONAL_BOOKING_FEE\&quot;,\n      \&quot;amount\&quot;: 95.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;EXTERNAL_SETTLEMENT\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-manual-invoice.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-manual-invoice.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-manual-invoice.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360E5\&quot;,\n  \&quot;source\&quot;: \&quot;MockAmadeus\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;tmc\&quot;: \&quot;HelloWorld Travel\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Taylor Chen\&quot;,\n    \&quot;email\&quot;: \&quot;taylor.chen@example.test\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-EXEC\&quot;,\n  \&quot;costCentre\&quot;: \&quot;EXEC\&quot;,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;SYD\&quot;,\n      \&quot;to\&quot;: \&quot;SIN\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-09-05T08:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-09-05T13:40:00+08:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;SQ\&quot;,\n      \&quot;flight\&quot;: \&quot;SQ221\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;6180000000005\&quot;,\n    \&quot;fare\&quot;: 3200.0,\n    \&quot;tax\&quot;: 390.0,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;INTERNATIONAL_BOOKING_FEE\&quot;,\n      \&quot;amount\&quot;: 95.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;MANUAL_INVOICE\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-missing-cost-centre.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-missing-cost-centre.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-missing-cost-centre.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360B2\&quot;,\n  \&quot;source\&quot;: \&quot;Mock Sabre\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Priya Singh\&quot;,\n    \&quot;email\&quot;: \&quot;priya.singh@coca-cola.example\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-EMEA\&quot;,\n  \&quot;costCentre\&quot;: null,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;SYD\&quot;,\n      \&quot;to\&quot;: \&quot;SIN\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-07-02T12:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-07-02T18:20:00+08:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;SQ\&quot;,\n      \&quot;flight\&quot;: \&quot;SQ222\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;6180000000002\&quot;,\n    \&quot;fare\&quot;: 1800.0,\n    \&quot;tax\&quot;: 310.55,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;INTERNATIONAL_BOOKING_FEE\&quot;,\n      \&quot;amount\&quot;: 95.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;INCOMPLETE_BLOCKED\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-package-deposit.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-package-deposit.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-package-deposit.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360C3\&quot;,\n  \&quot;source\&quot;: \&quot;Mock Offline Package\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Morgan Lee\&quot;,\n    \&quot;email\&quot;: \&quot;morgan.lee@coca-cola.example\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-NA\&quot;,\n  \&quot;costCentre\&quot;: \&quot;NA-MARKETING-010\&quot;,\n  \&quot;package\&quot;: {\n    \&quot;total\&quot;: 5000.0,\n    \&quot;deposit\&quot;: 1000.0,\n    \&quot;serviceFee\&quot;: 150.0,\n    \&quot;balance\&quot;: 4000.0,\n    \&quot;balanceDueDaysBeforeDeparture\&quot;: 30,\n    \&quot;departureDate\&quot;: \&quot;2026-09-01\&quot;\n  },\n  \&quot;paymentScenario\&quot;: \&quot;DEPOSIT_NOW_BALANCE_LATER\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-payment-failure.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-payment-failure.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-payment-failure.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360D4\&quot;,\n  \&quot;source\&quot;: \&quot;MockAmadeus\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;tmc\&quot;: \&quot;HelloWorld Travel\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Avery Williams\&quot;,\n    \&quot;email\&quot;: \&quot;avery.williams@example.test\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-EMEA\&quot;,\n  \&quot;costCentre\&quot;: \&quot;EMEA-MARKETING\&quot;,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;SYD\&quot;,\n      \&quot;to\&quot;: \&quot;LHR\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-08-10T22:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-08-11T05:30:00+00:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;BA\&quot;,\n      \&quot;flight\&quot;: \&quot;BA16\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;1250000000004\&quot;,\n    \&quot;fare\&quot;: 1950.0,\n    \&quot;tax\&quot;: 285.6,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;INTERNATIONAL_BOOKING_FEE\&quot;,\n      \&quot;amount\&quot;: 95.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;PAYMENT_FAIL_THEN_RETRY\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-refund-reissue.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-refund-reissue.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-refund-reissue.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360H8\&quot;,\n  \&quot;source\&quot;: \&quot;MockAmadeus\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;tmc\&quot;: \&quot;HelloWorld Travel\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Avery Williams\&quot;,\n    \&quot;email\&quot;: \&quot;avery.williams@example.test\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-EMEA\&quot;,\n  \&quot;costCentre\&quot;: \&quot;EMEA-MARKETING\&quot;,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;SYD\&quot;,\n      \&quot;to\&quot;: \&quot;DXB\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-06-25T23:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-06-26T06:00:00+04:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;EK\&quot;,\n      \&quot;flight\&quot;: \&quot;EK407\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;1760000000008\&quot;,\n    \&quot;fare\&quot;: 1600.0,\n    \&quot;tax\&quot;: 210.0,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;REFUND_PROCESSING_FEE\&quot;,\n      \&quot;amount\&quot;: 55.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;REFUND_REISSUE\&quot;,\n  \&quot;refundNote\&quot;: \&quot;Original ticket voided. Reissued on same route.\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;gds&quot;,
+    &quot;relativePath&quot;: &quot;gds/pnr-import-shadow-billing.json&quot;,
+    &quot;fileName&quot;: &quot;pnr-import-shadow-billing.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/gds/pnr-import-shadow-billing.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;pnr\&quot;: \&quot;C360G7\&quot;,\n  \&quot;source\&quot;: \&quot;MockAmadeus\&quot;,\n  \&quot;client\&quot;: \&quot;Coca-Cola\&quot;,\n  \&quot;tmc\&quot;: \&quot;HelloWorld Travel\&quot;,\n  \&quot;traveller\&quot;: {\n    \&quot;name\&quot;: \&quot;Jordan Nguyen\&quot;,\n    \&quot;email\&quot;: \&quot;jordan.nguyen@example.test\&quot;\n  },\n  \&quot;policyCode\&quot;: \&quot;CCA-TRIAL\&quot;,\n  \&quot;costCentre\&quot;: \&quot;APAC-SALES\&quot;,\n  \&quot;segments\&quot;: [\n    {\n      \&quot;type\&quot;: \&quot;AIR\&quot;,\n      \&quot;from\&quot;: \&quot;MEL\&quot;,\n      \&quot;to\&quot;: \&quot;BNE\&quot;,\n      \&quot;depart\&quot;: \&quot;2026-07-20T11:00:00+10:00\&quot;,\n      \&quot;arrive\&quot;: \&quot;2026-07-20T12:30:00+10:00\&quot;,\n      \&quot;carrier\&quot;: \&quot;QF\&quot;,\n      \&quot;flight\&quot;: \&quot;QF500\&quot;\n    }\n  ],\n  \&quot;ticket\&quot;: {\n    \&quot;number\&quot;: \&quot;0810000000007\&quot;,\n    \&quot;fare\&quot;: 280.0,\n    \&quot;tax\&quot;: 42.0,\n    \&quot;currency\&quot;: \&quot;AUD\&quot;\n  },\n  \&quot;serviceFees\&quot;: [\n    {\n      \&quot;code\&quot;: \&quot;BOOKING_FEE\&quot;,\n      \&quot;amount\&quot;: 45.0\n    }\n  ],\n  \&quot;paymentScenario\&quot;: \&quot;SHADOW_BILLING\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;payments&quot;,
+    &quot;relativePath&quot;: &quot;payments/stripe-webhook-payment-failed.json&quot;,
+    &quot;fileName&quot;: &quot;stripe-webhook-payment-failed.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/payments/stripe-webhook-payment-failed.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;provider\&quot;: \&quot;Stripe\&quot;,\n  \&quot;eventType\&quot;: \&quot;payment_intent.payment_failed\&quot;,\n  \&quot;mock\&quot;: true,\n  \&quot;invoiceNumber\&quot;: \&quot;INV-HWT-0002\&quot;,\n  \&quot;amount\&quot;: 2205.55,\n  \&quot;currency\&quot;: \&quot;AUD\&quot;,\n  \&quot;failureCode\&quot;: \&quot;insufficient_funds\&quot;,\n  \&quot;paymentMethod\&quot;: \&quot;pm_mock_mastercard_4444\&quot;\n}&quot;
+  },
+  {
+    &quot;category&quot;: &quot;payments&quot;,
+    &quot;relativePath&quot;: &quot;payments/stripe-webhook-payment-succeeded.json&quot;,
+    &quot;fileName&quot;: &quot;stripe-webhook-payment-succeeded.json&quot;,
+    &quot;extension&quot;: &quot;json&quot;,
+    &quot;url&quot;: &quot;/mock-data/payments/stripe-webhook-payment-succeeded.json&quot;,
+    &quot;content&quot;: &quot;{\n  \&quot;provider\&quot;: \&quot;Stripe\&quot;,\n  \&quot;eventType\&quot;: \&quot;payment_intent.succeeded\&quot;,\n  \&quot;mock\&quot;: true,\n  \&quot;invoiceNumber\&quot;: \&quot;INV-HWT-0001\&quot;,\n  \&quot;amount\&quot;: 535.9,\n  \&quot;currency\&quot;: \&quot;AUD\&quot;,\n  \&quot;paymentMethod\&quot;: \&quot;pm_mock_amex_8431\&quot;\n}&quot;
+  }
+]
+  </script>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+    const panels = Array.from(document.querySelectorAll("[data-panel]"));
+    const searchBox = document.getElementById("searchBox");
+    const emptyState = document.getElementById("emptyState");
+
+    function selectTab(category) {
+      tabs.forEach(tab => tab.classList.toggle("active", tab.dataset.tab === category));
+      panels.forEach(panel => panel.classList.toggle("active", panel.dataset.panel === category));
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const query = searchBox.value.trim().toLowerCase();
+      const activePanel = document.querySelector(".category-panel.active");
+      const cards = Array.from(activePanel.querySelectorAll("[data-file-card]"));
+
+      let visible = 0;
+
+      cards.forEach(card => {
+        const match = !query || card.dataset.search.includes(query);
+        card.classList.toggle("hidden", !match);
+        if (match) visible++;
+      });
+
+      emptyState.style.display = visible === 0 ? "block" : "none";
+    }
+
+    function expandAll() {
+      document.querySelectorAll("details").forEach(detail => detail.open = true);
+    }
+
+    function collapseAll() {
+      document.querySelectorAll("details").forEach(detail => detail.open = false);
+    }
+
+    async function copyText(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const text = el.innerText;
+
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => selectTab(tab.dataset.tab));
+    });
+
+    searchBox.addEventListener("input", applyFilter);
+  </script>
+</body>
+</html>

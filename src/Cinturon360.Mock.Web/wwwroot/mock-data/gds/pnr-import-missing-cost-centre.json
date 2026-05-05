@@ -1,0 +1,35 @@
+{
+  "pnr": "C360B2",
+  "source": "Mock Sabre",
+  "client": "Coca-Cola",
+  "traveller": {
+    "name": "Priya Singh",
+    "email": "priya.singh@coca-cola.example"
+  },
+  "policyCode": "CCA-EMEA",
+  "costCentre": null,
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "SYD",
+      "to": "SIN",
+      "depart": "2026-07-02T12:00:00+10:00",
+      "arrive": "2026-07-02T18:20:00+08:00",
+      "carrier": "SQ",
+      "flight": "SQ222"
+    }
+  ],
+  "ticket": {
+    "number": "6180000000002",
+    "fare": 1800.0,
+    "tax": 310.55,
+    "currency": "AUD"
+  },
+  "serviceFees": [
+    {
+      "code": "INTERNATIONAL_BOOKING_FEE",
+      "amount": 95.0
+    }
+  ],
+  "paymentScenario": "INCOMPLETE_BLOCKED"
+}

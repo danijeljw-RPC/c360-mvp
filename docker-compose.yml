@@ -24,10 +24,10 @@ services:
     container_name: cinturon360-mock-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_URLS: http://+:8090
       ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=cinturon360_mock;Username=cinturon360;Password=cinturon360_dev_password
     ports:
-      - "5088:8080"
+      - "8090:8090"
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,10 +40,10 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ApiBaseUrl: http://api:8080
-      ApiPublicUrl: http://localhost:5088
+      ApiBaseUrl: http://api:8090
+      ApiPublicUrl: http://localhost:8090
     ports:
-      - "5089:8080"
+      - "8080:8080"
     depends_on:
       - api
 

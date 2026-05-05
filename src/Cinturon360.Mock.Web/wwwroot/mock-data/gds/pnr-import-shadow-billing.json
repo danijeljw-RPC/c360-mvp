@@ -1,0 +1,31 @@
+{
+  "pnr": "C360G7",
+  "source": "MockAmadeus",
+  "client": "Coca-Cola",
+  "tmc": "HelloWorld Travel",
+  "traveller": {
+    "name": "Jordan Nguyen",
+    "email": "jordan.nguyen@example.test"
+  },
+  "policyCode": "CCA-TRIAL",
+  "costCentre": "APAC-SALES",
+  "segments": [
+    {
+      "type": "AIR",
+      "from": "MEL",
+      "to": "BNE",
+      "depart": "2026-07-20T11:00:00+10:00",
+      "arrive": "2026-07-20T12:30:00+10:00",
+      "carrier": "QF",
+      "flight": "QF500"
+    }
+  ],
+  "ticket": {
+    "number": "0810000000007",
+    "fare": 280.00,
+    "tax": 42.00,
+    "currency": "AUD"
+  },
+  "serviceFees": [{"code": "BOOKING_FEE", "amount": 45.0}],
+  "paymentScenario": "SHADOW_BILLING"
+}

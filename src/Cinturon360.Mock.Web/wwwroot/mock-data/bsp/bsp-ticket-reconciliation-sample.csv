@@ -1,0 +1,3 @@
+ticket_number,pnr,airline,fare,tax,commission,total,currency,status
+0810000000001,C360A1,QF,420.00,66.40,0.00,486.40,AUD,Matched
+6180000000002,C360B2,SQ,1800.00,310.55,0.00,2110.55,AUD,Review

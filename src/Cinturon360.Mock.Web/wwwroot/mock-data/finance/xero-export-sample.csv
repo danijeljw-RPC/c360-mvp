@@ -1,0 +1,3 @@
+ContactName,EmailAddress,POAddressLine1,City,Region,PostalCode,Country,InvoiceNumber,InvoiceDate,DueDate,Description,Quantity,UnitAmount,TaxType,TaxAmount,AccountCode,Currency
+HelloWorld Travel,finance@helloworld.example,123 Travel Street,Sydney,NSW,2000,AU,INV-HWT-0001,2026-06-10,2026-06-24,Domestic flight SYD/MEL - Jordan Nguyen,1,420.00,GST on Income,42.00,200,AUD
+HelloWorld Travel,finance@helloworld.example,123 Travel Street,Sydney,NSW,2000,AU,INV-HWT-0001,2026-06-10,2026-06-24,TMC booking fee,1,45.00,GST on Income,4.50,200,AUD

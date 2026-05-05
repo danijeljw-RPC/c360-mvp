@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinturon360 — Platform Reference</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --c360-blue:    #3b82f6;
+      --c360-indigo:  #6366f1;
+      --c360-orange:  #f97316;
+      --c360-green:   #22c55e;
+      --c360-red:     #ef4444;
+      --c360-yellow:  #eab308;
+      --sidebar-w:    280px;
+    }
+
+    /* ── Layout ── */
+    body { font-size: 0.925rem; }
+
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      overflow-y: auto;
+      background: #0d1117;
+      border-right: 1px solid #1e2a3a;
+      z-index: 1000;
+      padding: 0;
+    }
+
+    #sidebar .brand {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid #1e2a3a;
+    }
+
+    #sidebar .brand .badge-env {
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      background: #1a2233;
+      color: #64748b;
+      border: 1px solid #1e2a3a;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+
+    #sidebar .nav-section {
+      padding: 0.75rem 1.25rem 0.25rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    #sidebar .nav-link {
+      padding: 0.35rem 1.25rem;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    #sidebar .nav-link:hover,
+    #sidebar .nav-link.active {
+      color: #e2e8f0;
+      background: #1e2a3a;
+    }
+    #sidebar .nav-link i { font-size: 0.95rem; opacity: 0.75; }
+
+    #main {
+      margin-left: var(--sidebar-w);
+      padding: 2.5rem 3rem;
+      max-width: 1100px;
+    }
+
+    @media (max-width: 768px) {
+      #sidebar { display: none; }
+      #main { margin-left: 0; padding: 1.5rem; }
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: 2rem; font-weight: 700; }
+    h2 { font-size: 1.4rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 1px solid #1e2a3a; padding-bottom: 0.5rem; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.75rem; }
+    h4 { font-size: 0.95rem; font-weight: 600; }
+
+    section { margin-bottom: 3.5rem; }
+
+    /* ── Cards / Callouts ── */
+    .callout {
+      border-left: 4px solid var(--c360-blue);
+      background: #0d1e30;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout.orange  { border-color: var(--c360-orange); background: #1e150a; }
+    .callout.green   { border-color: var(--c360-green);  background: #0d1f12; }
+    .callout.red     { border-color: var(--c360-red);    background: #1f0d0d; }
+    .callout.yellow  { border-color: var(--c360-yellow); background: #1e1a0a; }
+    .callout.indigo  { border-color: var(--c360-indigo); background: #121229; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    /* ── Hierarchy tree ── */
+    .org-tree {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .org-tree li {
+      position: relative;
+      padding: 0.5rem 0.75rem 0.5rem 1.25rem;
+    }
+    .org-tree li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--c360-indigo), var(--c360-blue));
+      border-radius: 3px;
+    }
+    .org-tree .org-role {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+    }
+    .org-tree .org-name { font-weight: 600; font-size: 1rem; }
+    .org-tree .child { margin-left: 1.75rem; }
+    .org-tree .child::before { background: linear-gradient(180deg, var(--c360-blue), var(--c360-orange)); }
+    .org-tree .grandchild { margin-left: 3.5rem; }
+    .org-tree .grandchild::before { background: linear-gradient(180deg, var(--c360-orange), var(--c360-green)); }
+
+    /* ── Page cards ── */
+    .page-card {
+      background: #0d1117;
+      border: 1px solid #1e2a3a;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .page-card .route {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: #1a2233;
+      color: var(--c360-blue);
+      border-radius: 5px;
+      padding: 2px 8px;
+    }
+    .page-card h4 { margin: 0.5rem 0 0.35rem; }
+    .page-card p  { margin: 0; color: #94a3b8; font-size: 0.875rem; }
+
+    /* ── Scenario badges ── */
+    .scenario-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--c360-indigo);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    /* ── API table ── */
+    .api-table { font-size: 0.83rem; }
+    .api-table td { vertical-align: middle; }
+    .method-badge {
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .method-get    { background: #0d3321; color: #4ade80; }
+    .method-post   { background: #0d1e30; color: #60a5fa; }
+    .endpoint-path { font-family: monospace; color: #e2e8f0; font-size: 0.8rem; }
+    .endpoint-desc { color: #94a3b8; }
+
+    /* ── Mock data cards ── */
+    .file-card {
+      background: #0a0f1a;
+      border: 1px solid #1e2a3a;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+    .file-card .file-icon { font-size: 1.4rem; margin-top: 1px; }
+    .file-card .file-name { font-family: monospace; font-size: 0.82rem; color: var(--c360-blue); }
+    .file-card .file-desc { font-size: 0.82rem; color: #94a3b8; margin: 0; }
+
+    /* ── Provider pills ── */
+    .provider-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #111827;
+      border: 1px solid #1e2a3a;
+      border-radius: 99px;
+      padding: 4px 12px 4px 8px;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      margin: 3px;
+    }
+    .provider-pill i { color: var(--c360-blue); }
+
+    /* ── Top hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0d1117 60%, #0d1e30);
+      border: 1px solid #1e2a3a;
+      border-radius: 14px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero .subtitle { color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }
+
+    /* ── Step list ── */
+    .step-list {
+      list-style: none;
+      padding: 0;
+      counter-reset: steps;
+    }
+    .step-list li {
+      counter-increment: steps;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #1a2233;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(steps);
+      min-width: 26px;
+      height: 26px;
+      background: #1e2a3a;
+      color: var(--c360-blue);
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Misc ── */
+    code { background: #1a2233; padding: 1px 5px; border-radius: 4px; font-size: 0.82rem; color: #93c5fd; }
+    pre  { background: #0a0f1a; border: 1px solid #1e2a3a; border-radius: 8px; padding: 1rem; font-size: 0.8rem; overflow-x: auto; }
+    .text-muted { color: #64748b !important; }
+    .divider { border-top: 1px solid #1e2a3a; margin: 2.5rem 0; }
+    .tag {
+      display: inline-block;
+      background: #1a2233;
+      border: 1px solid #1e2a3a;
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════ SIDEBAR ════════════ -->
+<nav id="sidebar">
+  <div class="brand">
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <span style="font-weight:800;font-size:1.1rem;color:#e2e8f0;">Cinturon360</span>
+      <span class="badge-env">MOCK MVP</span>
+    </div>
+    <div style="font-size:0.75rem;color:#475569;">Platform Reference Guide</div>
+  </div>
+
+  <div class="nav-section">Overview</div>
+  <a class="nav-link" href="#overview"><i class="bi bi-house"></i> Introduction</a>
+  <a class="nav-link" href="#architecture"><i class="bi bi-diagram-3"></i> Architecture</a>
+  <a class="nav-link" href="#getting-started"><i class="bi bi-play-circle"></i> Getting Started</a>
+  <a class="nav-link" href="#login"><i class="bi bi-key"></i> Login &amp; Auth</a>
+
+  <div class="nav-section">User Interface</div>
+  <a class="nav-link" href="#ui-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+  <a class="nav-link" href="#ui-organisations"><i class="bi bi-building"></i> Organisations</a>
+  <a class="nav-link" href="#ui-billing"><i class="bi bi-receipt"></i> Billing Relationships</a>
+  <a class="nav-link" href="#ui-policies"><i class="bi bi-shield-check"></i> Travel Policies</a>
+  <a class="nav-link" href="#ui-payment-methods"><i class="bi bi-credit-card-2-front"></i> Payment Methods</a>
+  <a class="nav-link" href="#ui-imports"><i class="bi bi-cloud-upload"></i> GDS Import</a>
+  <a class="nav-link" href="#ui-bookings"><i class="bi bi-ticket-perforated"></i> Bookings</a>
+  <a class="nav-link" href="#ui-booking-detail"><i class="bi bi-card-list"></i> Booking Detail</a>
+  <a class="nav-link" href="#ui-invoices"><i class="bi bi-file-earmark-text"></i> Invoices</a>
+  <a class="nav-link" href="#ui-invoice-detail"><i class="bi bi-file-earmark-richtext"></i> Invoice Detail</a>
+  <a class="nav-link" href="#ui-ledger"><i class="bi bi-journal-bookmark"></i> Internal Ledger</a>
+  <a class="nav-link" href="#ui-adm-acm"><i class="bi bi-exclamation-triangle"></i> ADM/ACM Workbench</a>
+  <a class="nav-link" href="#ui-reports"><i class="bi bi-bar-chart-line"></i> Reports</a>
+  <a class="nav-link" href="#ui-finance-exports"><i class="bi bi-box-arrow-up-right"></i> Finance Exports</a>
+  <a class="nav-link" href="#ui-audit"><i class="bi bi-clock-history"></i> Audit Log</a>
+
+  <div class="nav-section">Scenarios</div>
+  <a class="nav-link" href="#scenarios"><i class="bi bi-play-btn"></i> All Demo Scenarios</a>
+
+  <div class="nav-section">Data &amp; API</div>
+  <a class="nav-link" href="#mock-data"><i class="bi bi-folder2-open"></i> Mock Data Files</a>
+  <a class="nav-link" href="#api-reference"><i class="bi bi-braces"></i> API Reference</a>
+  <a class="nav-link" href="#providers"><i class="bi bi-plug"></i> Payment Providers</a>
+  <a class="nav-link" href="#architecture-principle"><i class="bi bi-lock"></i> Ownership Principle</a>
+</nav>
+
+<!-- ════════════ MAIN ════════════ -->
+<main id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+      <div>
+        <h1 class="mb-1">Cinturon360 Mock MVP</h1>
+        <p class="subtitle mb-0">A fully-simulated travel mid-office platform demonstrating booking finance, invoicing, payment orchestration, and audit — all without external service dependencies.</p>
+      </div>
+      <div class="d-flex flex-column gap-2 text-end" style="flex-shrink:0;">
+        <a href="/mock-data" class="btn btn-sm" style="background:#1a2233;border:1px solid #1e2a3a;color:#94a3b8;">
+          <i class="bi bi-folder2-open me-1"></i> Mock Data Files
+        </a>
+        <a href="/swagger" class="btn btn-sm" style="background:#1a2233;border:1px solid #1e2a3a;color:#94a3b8;">
+          <i class="bi bi-braces me-1"></i> Swagger / API
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <section id="overview">
+    <h2><i class="bi bi-house me-2 text-muted"></i>Introduction</h2>
+    <p>
+      Cinturon360 is a proposed travel technology platform designed for travel agencies, brokers, and Travel Management Companies (TMCs).
+      This mockup is a <strong>local-only, fully deterministic demo system</strong>. No external APIs are called. No real payment data is processed. No credentials leave your machine.
+    </p>
+    <p>
+      The purpose of this demo is to prove one central architecture principle:
+    </p>
+    <div class="callout indigo">
+      <strong style="color:#a5b4fc;">Core Principle:</strong>
+      <p class="mt-1 mb-0" style="color:#c7d2fe;">
+        Cinturon360 owns the internal booking-finance logic, ledger, invoice structure, and audit trail.
+        Payment providers, finance systems, GDS/NDC imports, and BSP-style files are <em>simulated channels only</em>.
+        The Cinturon360 internal ledger is always the source of truth.
+      </p>
+    </div>
+    <p>The stack is: <span class="tag">.NET 10</span><span class="tag">ASP.NET Core</span><span class="tag">Blazor Server</span><span class="tag">EF Core</span><span class="tag">PostgreSQL 17</span><span class="tag">Docker Compose</span></p>
+  </section>
+
+  <!-- ═══ ARCHITECTURE ═══ -->
+  <section id="architecture">
+    <h2><i class="bi bi-diagram-3 me-2 text-muted"></i>Organisation Hierarchy &amp; Architecture</h2>
+
+    <p>The platform models a three-tier organisation hierarchy. Every billing, policy, and payment decision traces back through this hierarchy.</p>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-5">
+        <ul class="org-tree">
+          <li>
+            <div class="org-role">Platform Vendor</div>
+            <div class="org-name">Avanōa Technology</div>
+          </li>
+          <li class="child">
+            <div class="org-role">Travel Management Company (TMC)</div>
+            <div class="org-name">HelloWorld Travel</div>
+          </li>
+          <li class="grandchild">
+            <div class="org-role">Client Organisation</div>
+            <div class="org-name">Coca-Cola</div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-7">
+        <div class="callout">
+          <h4 class="mb-2" style="font-size:0.85rem;">Responsibility Rules</h4>
+          <ul class="mb-0" style="padding-left:1.25rem;color:#94a3b8;font-size:0.85rem;">
+            <li><strong style="color:#e2e8f0;">Avanōa Technology</strong> operates the platform, executes rules, and routes payments. It is responsible only for platform operation unless explicitly the seller for a given relationship.</li>
+            <li class="mt-1"><strong style="color:#e2e8f0;">HelloWorld Travel</strong> onboards Coca-Cola. If HelloWorld configures billing for Coca-Cola, HelloWorld owns the credit and payment risk.</li>
+            <li class="mt-1"><strong style="color:#e2e8f0;">Coca-Cola</strong> is the client. Its travellers are billed according to travel policies and cost centres configured by HelloWorld.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3>Service Decomposition</h3>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="page-card">
+          <span class="route">:5000</span>
+          <h4>Cinturon360.Mock.Api</h4>
+          <p>ASP.NET Core REST API. Handles all data access, business logic, payment simulation, import processing, and finance export generation. Exposes Swagger UI at <code>/swagger</code>.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="page-card">
+          <span class="route">:5001</span>
+          <h4>Cinturon360.Mock.Web</h4>
+          <p>Blazor Server frontend. All UI pages live here. Communicates with the API via <code>ApiClient</code> (HTTP). Also serves static mock data files at <code>/mock-data</code>.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="page-card">
+          <span class="route">:5432</span>
+          <h4>PostgreSQL 17</h4>
+          <p>Single database containing all schema and seeded demo data. Initialised via SQL scripts in <code>db/init/</code>. All scenario data is pre-seeded at startup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ GETTING STARTED ═══ -->
+  <section id="getting-started">
+    <h2><i class="bi bi-play-circle me-2 text-muted"></i>Getting Started</h2>
+
+    <p>The entire platform runs with a single command. No cloud account, no API keys, no external services required.</p>
+
+    <pre><code>docker compose up -d</code></pre>
+
+    <p>After the containers start (allow ~15 seconds for PostgreSQL to initialise and the API to seed data):</p>
+
+    <ol class="step-list">
+      <li>Open your browser and navigate to the Web UI: <code>http://localhost:5001</code></li>
+      <li>You will be redirected to <code>/login</code> — use the seeded demo account below.</li>
+      <li>After login you land on the <strong>Dashboard</strong> at <code>/</code>.</li>
+      <li>Navigate using the sidebar to explore all modules.</li>
+      <li>To explore the REST API interactively, go to <code>http://localhost:5000/swagger</code>.</li>
+      <li>To download raw mock data files, go to <code>http://localhost:5001/mock-data</code>.</li>
+    </ol>
+
+    <div class="callout green mt-3">
+      <strong>Tip — Reset to clean state:</strong>
+      <p class="mt-1 mb-0">Run <code>docker compose down -v &amp;&amp; docker compose up -d</code> to destroy the database volume and reseed from scratch. All imported bookings, generated invoices, and payment attempts will be reset to their original seeded state.</p>
+    </div>
+  </section>
+
+  <!-- ═══ LOGIN ═══ -->
+  <section id="login">
+    <h2><i class="bi bi-key me-2 text-muted"></i>Login &amp; Authentication</h2>
+    <p>Authentication is a fake, session-cookie–based login against seeded database data. There is no SSO, no MFA, and no JWT required. It exists only to provide a realistic demo flow.</p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-person-badge me-2 text-muted"></i>Demo Account</h4>
+          <table class="table table-sm table-borderless mb-0" style="font-size:0.85rem;">
+            <tbody>
+              <tr><td class="text-muted pe-3" style="width:110px;">Email</td><td><code>demo@avanoa.local</code></td></tr>
+              <tr><td class="text-muted">Password</td><td><code>DemoPassword123!</code></td></tr>
+              <tr><td class="text-muted">Role</td><td><code>PlatformAdmin</code></td></tr>
+              <tr><td class="text-muted">Organisation</td><td>Avanōa Technology</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="callout yellow">
+          <h4 class="mb-2" style="font-size:0.85rem;"><i class="bi bi-exclamation-triangle me-1"></i> Security Notice</h4>
+          <p class="mb-0" style="font-size:0.85rem;">This is a demo-only credential. No production security claims are made. Do not use this system to store real payment information, real traveller PII, or any production data.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-3">All protected pages check <code>Session.IsLoggedIn</code> on render. If the session cookie is absent or expired, the user is redirected back to <code>/login</code>. Logout clears the server-side session. The API does not require auth tokens — it trusts calls from the Blazor backend in this local-only demo context.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ UI PAGES ═══ -->
+  <h2 style="margin-top:0;"><i class="bi bi-layout-text-sidebar me-2 text-muted"></i>User Interface Pages</h2>
+  <p class="text-muted">Every page in the Blazor Server application is described below, including its route, purpose, and what actions can be performed.</p>
+
+  <!-- Dashboard -->
+  <section id="ui-dashboard">
+    <h3><i class="bi bi-speedometer2 me-2 text-muted"></i>Dashboard <span class="route ms-2">/</span></h3>
+    <p>
+      The landing page after login. Displays a real-time summary of platform-wide activity pulled from the API at <code>/api/dashboard</code>.
+    </p>
+    <div class="row g-2 mb-3">
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Bookings Imported</small><strong>Total PNRs loaded into the system</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Needs Review</small><strong style="color:#eab308;">Bookings with missing data</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Invoices Issued</small><strong>Generated invoice count</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Payments Pending</small><strong style="color:#3b82f6;">Awaiting collection</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Failed Payments</small><strong style="color:#ef4444;">Require retry or manual action</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Deposits Due</small><strong>AUD deposit schedule items outstanding</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">Future Balances</small><strong>Scheduled future collections</strong></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="page-card p-3"><small class="text-muted d-block">ADM Exposure</small><strong style="color:#f97316;">AUD value at risk from debit memos</strong></div></div>
+    </div>
+    <p>
+      The dashboard also displays a <strong>Recent Audit Events</strong> table showing the last 10 platform actions with actor, entity, and timestamp. This provides immediate visibility into system activity without navigating to the full audit log.
+    </p>
+    <div class="callout indigo">
+      The dashboard data reflects the live database state. After importing a PNR, generating an invoice, or processing a payment, return to the dashboard to see the counts update.
+    </div>
+  </section>
+
+  <!-- Organisations -->
+  <section id="ui-organisations">
+    <h3><i class="bi bi-building me-2 text-muted"></i>Organisation Hierarchy <span class="route ms-2">/organisations</span></h3>
+    <p>
+      Displays the full three-tier organisation tree: <strong>Avanōa Technology → HelloWorld Travel → Coca-Cola</strong>.
+      The tree is rendered recursively — click any node to expand its detail panel on the right, showing:
+    </p>
+    <ul style="color:#94a3b8;">
+      <li>Organisation type (Vendor / TMC / Client)</li>
+      <li>Default currency and country</li>
+      <li>Registered business number</li>
+      <li>Active status</li>
+      <li>Parent organisation link</li>
+    </ul>
+    <p>The hierarchy is informational in this view. Billing configuration for each relationship is managed on the <strong>Billing Relationships</strong> page.</p>
+  </section>
+
+  <!-- Billing Relationships -->
+  <section id="ui-billing">
+    <h3><i class="bi bi-receipt me-2 text-muted"></i>Billing Relationships <span class="route ms-2">/billing-relationships</span></h3>
+    <p>
+      Lists every seller–buyer pair in the system. Each relationship defines:
+    </p>
+    <div class="row g-2 mb-3">
+      <div class="col-md-6">
+        <ul style="color:#94a3b8;font-size:0.875rem;">
+          <li><strong style="color:#e2e8f0;">Seller</strong> — the organisation that raises invoices and holds credit risk</li>
+          <li><strong style="color:#e2e8f0;">Buyer</strong> — the organisation receiving the service or platform charge</li>
+          <li><strong style="color:#e2e8f0;">Billing Mode</strong> — e.g. <code>CardCharge</code>, <code>ManualInvoice</code>, <code>ExternalFinanceSystem</code>, <code>ShadowBilling</code></li>
+          <li><strong style="color:#e2e8f0;">Payment Provider</strong> — which simulated provider is used for card collection</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul style="color:#94a3b8;font-size:0.875rem;">
+          <li><strong style="color:#e2e8f0;">Payment Terms</strong> — days until balance is due</li>
+          <li><strong style="color:#e2e8f0;">Currency</strong> — AUD for all demo relationships</li>
+          <li><strong style="color:#e2e8f0;">Risk Held By Seller</strong> — confirms commercial risk ownership</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      The billing relationship record is what determines how an invoice is collected. When a booking is processed, the system looks up the relationship between the TMC (HelloWorld) and the client (Coca-Cola) to decide the billing mode and provider.
+    </div>
+  </section>
+
+  <!-- Travel Policies -->
+  <section id="ui-policies">
+    <h3><i class="bi bi-shield-check me-2 text-muted"></i>Travel Policies <span class="route ms-2">/travel-policies</span></h3>
+    <p>
+      Lists all travel policies configured for Coca-Cola by HelloWorld Travel. Each policy has:
+    </p>
+    <ul style="color:#94a3b8;font-size:0.875rem;">
+      <li><strong style="color:#e2e8f0;">Code</strong> — short identifier used in PNR imports (e.g. <code>APAC</code>, <code>EMEA</code>, <code>NAMER</code>)</li>
+      <li><strong style="color:#e2e8f0;">Name</strong> — human-readable policy name</li>
+      <li><strong style="color:#e2e8f0;">Client</strong> — which organisation this policy belongs to</li>
+      <li><strong style="color:#e2e8f0;">Billing Behaviour</strong> — controls how payment is routed: <code>UseDefaultOrgMethod</code>, <code>UseSpecificCard</code>, <code>ManualApprovalRequired</code>, <code>ShadowBillingOnly</code></li>
+      <li><strong style="color:#e2e8f0;">Payment Method</strong> — if the policy specifies a card, the display label of that card (e.g. APAC Mastercard, EMEA Amex)</li>
+    </ul>
+    <div class="callout orange">
+      <strong>Scenario 4 — Policy Payment Override:</strong> The APAC policy routes to the APAC Mastercard, EMEA routes to the EMEA Amex, and North America uses the default organisation billing. This is configured in the travel policy table and automatically applied during invoice generation.
+    </div>
+  </section>
+
+  <!-- Payment Methods -->
+  <section id="ui-payment-methods">
+    <h3><i class="bi bi-credit-card-2-front me-2 text-muted"></i>Payment Methods <span class="route ms-2">/payment-methods</span></h3>
+    <p>
+      Displays all fake payment method references on file for Coca-Cola. These are <strong>display-only metadata records</strong> — no real card data is stored anywhere in the system.
+    </p>
+    <p>The seeded fake payment references are:</p>
+    <div class="row g-2 mb-3">
+      <div class="col-md-4"><div class="page-card"><div class="text-muted mb-1" style="font-size:0.75rem;">Default</div><strong>Visa ending 1111</strong><div class="text-muted" style="font-size:0.78rem;">Expires 08/2030</div></div></div>
+      <div class="col-md-4"><div class="page-card"><div class="text-muted mb-1" style="font-size:0.75rem;">APAC Policy</div><strong>Mastercard ending 4444</strong><div class="text-muted" style="font-size:0.78rem;">Expires 12/2033</div></div></div>
+      <div class="col-md-4"><div class="page-card"><div class="text-muted mb-1" style="font-size:0.75rem;">EMEA Policy</div><strong>Amex ending 8431</strong><div class="text-muted" style="font-size:0.78rem;">Expires 03/2044</div></div></div>
+    </div>
+    <div class="callout red">
+      <i class="bi bi-shield-lock me-1"></i> <strong>No real card data is ever collected, stored, or transmitted.</strong> The system never presents a card entry form. These references exist solely for UI demonstration purposes.
+    </div>
+  </section>
+
+  <!-- GDS Import -->
+  <section id="ui-imports">
+    <h3><i class="bi bi-cloud-upload me-2 text-muted"></i>GDS / Content Import <span class="route ms-2">/imports</span></h3>
+    <p>
+      The entry point for importing simulated GDS PNR data. This page lists the pre-built JSON PNR files from <code>/mock-data/gds/</code> and lets you import any of them into the system.
+    </p>
+    <p><strong>How it works:</strong></p>
+    <ol class="step-list">
+      <li>Select a PNR file from the dropdown (the files are served from <code>/mock-data/gds/</code>)</li>
+      <li>Click <strong>Import Selected File</strong></li>
+      <li>The API parses the JSON, validates completeness (traveller, cost centre, policy, segments), and creates a <code>Booking</code> record</li>
+      <li>Incomplete bookings are flagged with missing-field warnings</li>
+      <li>You are redirected to the Bookings list to see the result</li>
+    </ol>
+    <p>The page also shows any import issues discovered during validation, so you can see exactly what is missing from a PNR before attempting to invoice it.</p>
+  </section>
+
+  <!-- Bookings -->
+  <section id="ui-bookings">
+    <h3><i class="bi bi-ticket-perforated me-2 text-muted"></i>Bookings List <span class="route ms-2">/bookings</span></h3>
+    <p>
+      A table of all bookings in the system. Each row shows:
+    </p>
+    <ul style="color:#94a3b8;font-size:0.875rem;">
+      <li><strong style="color:#e2e8f0;">Reference</strong> — internal booking reference (e.g. <code>BK-20240001</code>)</li>
+      <li><strong style="color:#e2e8f0;">PNR</strong> — the GDS PNR code from the import</li>
+      <li><strong style="color:#e2e8f0;">Traveller</strong> — passenger name</li>
+      <li><strong style="color:#e2e8f0;">Client</strong> — the organisation (Coca-Cola)</li>
+      <li><strong style="color:#e2e8f0;">Policy</strong> — travel policy applied, if matched</li>
+      <li><strong style="color:#e2e8f0;">Cost Centre</strong> — shown as a warning badge if missing</li>
+      <li><strong style="color:#e2e8f0;">Total (AUD)</strong> — gross booking value including taxes and fees</li>
+      <li><strong style="color:#e2e8f0;">Status</strong> — <code>Imported</code>, <code>Incomplete</code>, <code>ReadyForBilling</code>, <code>Invoiced</code></li>
+    </ul>
+    <p>Click <strong>View</strong> on any row to open the Booking Detail page. The <strong>+ Import GDS</strong> button links to the import page.</p>
+  </section>
+
+  <!-- Booking Detail -->
+  <section id="ui-booking-detail">
+    <h3><i class="bi bi-card-list me-2 text-muted"></i>Booking Detail <span class="route ms-2">/bookings/{id}</span></h3>
+    <p>The most action-rich page in the UI. From here you can:</p>
+    <div class="row g-2 mb-3">
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-exclamation-triangle me-2" style="color:#eab308;"></i>Completeness Warnings</h4>
+          <p>If the booking has missing fields (cost centre, policy, traveller match), a warning banner lists them. All issues must be resolved before invoicing is allowed.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-pencil me-2" style="color:#3b82f6;"></i>Assign Cost Centre</h4>
+          <p>If a cost centre is missing, an inline field lets you type and save the cost centre code. After saving, the booking re-validates and the warning clears.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-shield me-2" style="color:#6366f1;"></i>Assign Travel Policy</h4>
+          <p>Allows manual assignment of a travel policy code if it was not matched during import. Triggers re-validation.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-check-circle me-2" style="color:#22c55e;"></i>Mark Ready for Billing</h4>
+          <p>Once all completeness checks pass, you can promote the booking to <code>ReadyForBilling</code> status, enabling invoice generation.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-file-earmark-plus me-2" style="color:#f97316;"></i>Generate Invoice</h4>
+          <p>Creates an internal invoice with calculated fare, taxes, service fee, surcharge, and scheduled payment items. Available only when the booking is <code>ReadyForBilling</code>.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-list-columns me-2" style="color:#94a3b8;"></i>Segments &amp; Documents</h4>
+          <p>Shows all travel segments (flights, hotels, car hire) and documents (tickets, MCOs) imported with the PNR. Read-only view of the raw GDS content.</p>
+        </div>
+      </div>
+    </div>
+    <p>The booking detail page also displays the linked invoice (if generated) and a list of payment schedule items (deposit, balance, service fee) with their due dates and status.</p>
+  </section>
+
+  <!-- Invoices -->
+  <section id="ui-invoices">
+    <h3><i class="bi bi-file-earmark-text me-2 text-muted"></i>Invoices List <span class="route ms-2">/invoices</span></h3>
+    <p>
+      Lists all internal invoices in the system. Columns include seller, buyer, booking reference, collection mode, provider, total, and status.
+      Status values are: <code>Draft</code>, <code>Issued</code>, <code>Paid</code>, <code>PartiallyPaid</code>, <code>Overdue</code>, <code>Disputed</code>, <code>ExternallyManaged</code>.
+    </p>
+    <p>Click <strong>View</strong> to open the Invoice Detail page for full line-item, payment, and action controls.</p>
+  </section>
+
+  <!-- Invoice Detail -->
+  <section id="ui-invoice-detail">
+    <h3><i class="bi bi-file-earmark-richtext me-2 text-muted"></i>Invoice Detail <span class="route ms-2">/invoices/{id}</span></h3>
+    <p>
+      Displays the complete invoice including line items, payment schedule, and all recorded payment attempts. Actions available depend on the invoice's billing mode and current status:
+    </p>
+
+    <div class="callout mb-3">
+      <strong>Simulation Note:</strong> A banner on every invoice detail page reads: <em>"Provider action simulated only. No external payment was made. Cinturon360 internal invoice remains the source of truth."</em>
+    </div>
+
+    <div class="row g-2">
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-play-circle me-1" style="color:#22c55e;"></i> Simulate Collection</h4>
+          <p>For card-based invoices. Simulates sending the invoice to the configured provider (Stripe, Airwallex, etc.). Returns either a <code>Succeeded</code> or <code>Failed</code> result deterministically based on the scenario.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-arrow-repeat me-1" style="color:#3b82f6;"></i> Retry Payment</h4>
+          <p>Available after a failed payment attempt. Creates a new <code>PaymentAttempt</code> record and re-simulates the provider call. Useful for demonstrating Scenario 5.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-pencil-square me-1" style="color:#f97316;"></i> Mark Manual Payment Received</h4>
+          <p>For <code>ManualInvoice</code> billing mode. Records that the client has paid outside the platform (bank transfer, cheque, etc.). Updates status to <code>Paid</code> and creates a ledger credit entry.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-box-arrow-up-right me-1" style="color:#6366f1;"></i> Mark Externally Settled</h4>
+          <p>For invoices managed by an external finance system (Xero, NetSuite). Marks the invoice as <code>ExternallyManaged</code> so it is excluded from further internal collection actions.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-3">The invoice detail page also shows the full <strong>Invoice Lines</strong> table (fare, taxes, service fees, adjustments) and the <strong>Payment Attempts</strong> history with timestamps, amounts, provider responses, and fake external reference IDs.</p>
+  </section>
+
+  <!-- Ledger -->
+  <section id="ui-ledger">
+    <h3><i class="bi bi-journal-bookmark me-2 text-muted"></i>Internal Ledger <span class="route ms-2">/ledger</span></h3>
+    <p>
+      The ledger is the financial backbone of the platform. Every financial movement — invoice generation, payment receipt, failed attempt, manual settlement, ADM charge, ACM credit — creates a <code>LedgerEntry</code>.
+    </p>
+    <div class="callout indigo mb-3">
+      <strong style="color:#a5b4fc;">The Cinturon360 internal ledger is the source of truth for all financial movements.</strong> Provider references (Stripe charge IDs, fake external refs) are recorded for traceability only — the ledger itself is owned by Cinturon360 and is not derived from provider data.
+    </div>
+    <p>Columns: timestamp, entry type, description, debit amount, credit amount, currency, external reference. Entry types include: <code>InvoiceGenerated</code>, <code>PaymentReceived</code>, <code>PaymentFailed</code>, <code>ManualSettlement</code>, <code>AdmCharge</code>, <code>AcmCredit</code>, <code>ExternalSettlement</code>.</p>
+  </section>
+
+  <!-- ADM/ACM -->
+  <section id="ui-adm-acm">
+    <h3><i class="bi bi-exclamation-triangle me-2 text-muted"></i>ADM/ACM Workbench <span class="route ms-2">/agency-memos</span></h3>
+    <p>
+      Agency Debit Memos (ADMs) and Agency Credit Memos (ACMs) are BSP-issued adjustments from airlines to agencies. This workbench handles their import, matching, and decisioning.
+    </p>
+
+    <h4>Importing</h4>
+    <p>Click <strong>Import BSP CSV</strong> and paste CSV content in the format:</p>
+    <pre><code>memo_number,memo_type,ticket_number,pnr,airline,reason_code,reason,amount,currency,status</code></pre>
+    <p>A sample file is available at <a href="/mock-data/bsp/bsp-adm-acm-sample.csv" style="color:var(--c360-blue);">/mock-data/bsp/bsp-adm-acm-sample.csv</a></p>
+
+    <h4>Decisioning</h4>
+    <p>Each imported memo can be actioned from the list or its detail page:</p>
+    <div class="row g-2">
+      <div class="col-md-4">
+        <div class="page-card">
+          <h4><i class="bi bi-hand-thumbs-down me-1" style="color:#ef4444;"></i> Dispute</h4>
+          <p>Marks the memo as disputed. In a live system this would initiate a dispute with the airline. Here it transitions the memo to <code>Disputed</code> status and logs the event.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="page-card">
+          <h4><i class="bi bi-building me-1" style="color:#eab308;"></i> Absorb Internally</h4>
+          <p>The agency (HelloWorld) absorbs the cost. Creates a <code>LedgerEntry</code> debit against the agency. The client (Coca-Cola) is not recharged.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="page-card">
+          <h4><i class="bi bi-arrow-right-circle me-1" style="color:#3b82f6;"></i> Recharge Client</h4>
+          <p>The cost is passed on to Coca-Cola. Generates an adjustment invoice line on the original booking invoice and creates a ledger entry.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-3">The memo detail page (<code>/agency-memos/{id}</code>) shows the matched booking, ticket, supplier, reason code, and complete action history.</p>
+  </section>
+
+  <!-- Reports -->
+  <section id="ui-reports">
+    <h3><i class="bi bi-bar-chart-line me-2 text-muted"></i>Reports <span class="route ms-2">/reports</span></h3>
+    <p>A tabbed reporting view with the following on-demand reports (loaded by clicking each tile):</p>
+    <div class="row g-2">
+      <div class="col-md-4"><div class="page-card"><h4>Outstanding Balances</h4><p>All unpaid invoices with booking reference, traveller, client, amount due, and due date.</p></div></div>
+      <div class="col-md-4"><div class="page-card"><h4>ADM/ACM Exposure</h4><p>Total value of open debit memos by airline, policy, and decisioning status.</p></div></div>
+      <div class="col-md-4"><div class="page-card"><h4>Future Balances</h4><p>All deposit/balance schedule items with future due dates and amounts. Highlights upcoming collections by date.</p></div></div>
+    </div>
+    <p class="mt-2 text-muted">Additional report endpoints are available in the API: <code>failed-payments</code>, <code>service-fees</code>, <code>shadow-billing</code>, <code>supplier-reconciliation</code>.</p>
+  </section>
+
+  <!-- Finance Exports -->
+  <section id="ui-finance-exports">
+    <h3><i class="bi bi-box-arrow-up-right me-2 text-muted"></i>Finance Exports <span class="route ms-2">/finance-exports</span></h3>
+    <p>
+      Generates simulated exports of internal invoices and ledger data for external finance systems. <strong>No data is sent to any live system.</strong>
+      All exports produce a downloadable file and mark the batch as completed.
+    </p>
+    <p>Supported export targets:</p>
+    <div class="row g-2 mb-3">
+      <div class="col-md-4"><div class="page-card"><h4><i class="bi bi-file-spreadsheet me-1" style="color:#22c55e;"></i> Xero</h4><p>Generates a CSV in Xero import format with invoice lines, tax amounts, and account codes.</p></div></div>
+      <div class="col-md-4"><div class="page-card"><h4><i class="bi bi-file-spreadsheet me-1" style="color:#3b82f6;"></i> NetSuite</h4><p>Generates a CSV in NetSuite journal entry format with subsidiary, entity, and currency fields.</p></div></div>
+      <div class="col-md-4"><div class="page-card"><h4><i class="bi bi-file-text me-1" style="color:#94a3b8;"></i> Generic Ledger CSV</h4><p>A universal CSV export with all ledger entries. Suitable for any accounting system with CSV import.</p></div></div>
+    </div>
+    <p>
+      Each export batch is recorded in the <code>FinanceExportBatch</code> table with a status of <code>Completed</code> or <code>Failed</code> (simulated).
+      A <strong>Download</strong> button on each batch row retrieves the sample file from <code>/mock-data/finance/</code>.
+    </p>
+  </section>
+
+  <!-- Audit Log -->
+  <section id="ui-audit">
+    <h3><i class="bi bi-clock-history me-2 text-muted"></i>Audit Log <span class="route ms-2">/audit</span></h3>
+    <p>
+      Every significant action in the platform writes an <code>AuditEvent</code> record. The audit log displays a chronological table of all events, including:
+    </p>
+    <ul style="color:#94a3b8;font-size:0.875rem;">
+      <li><strong style="color:#e2e8f0;">Timestamp</strong> — UTC datetime of the event</li>
+      <li><strong style="color:#e2e8f0;">Actor</strong> — the email of the user who triggered the action</li>
+      <li><strong style="color:#e2e8f0;">Entity Type</strong> — what kind of record was affected (Booking, Invoice, PaymentAttempt, AdmAcmMemo, etc.)</li>
+      <li><strong style="color:#e2e8f0;">Action</strong> — what happened (Imported, InvoiceGenerated, PaymentSucceeded, PaymentFailed, ManualPaymentReceived, CostCentreAssigned, AdmDisputed, etc.)</li>
+      <li><strong style="color:#e2e8f0;">Summary</strong> — human-readable description</li>
+    </ul>
+    <p>The audit log is append-only and cannot be edited from the UI. It provides a complete, tamper-evident trace of all platform activity during the demo.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ SCENARIOS ═══ -->
+  <section id="scenarios">
+    <h2><i class="bi bi-play-btn me-2 text-muted"></i>Demo Scenarios</h2>
+    <p>Eight pre-built scenarios demonstrate every major billing workflow. Each scenario has a corresponding PNR JSON file in <code>/mock-data/gds/</code> that can be imported from the <strong>GDS Import</strong> page.</p>
+
+    <!-- S1 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num">1</span>
+        <div>
+          <h4 class="mb-1">Immediate Card Payment</h4>
+          <p class="mb-2">File: <code>pnr-import-complete.json</code></p>
+          <p>Import a complete PNR, match traveller + policy + cost centre + supplier. The system calculates fare, taxes, service fee, and surcharge, generates an internal invoice, and routes the collection to simulated <strong>Stripe</strong>. The payment returns as <code>Succeeded</code>. This is the golden-path scenario showing the full happy-path workflow end-to-end.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Import → Booking Detail → Mark Ready → Generate Invoice → Invoice Detail → Simulate Collection → View Ledger</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:var(--c360-blue);">2</span>
+        <div>
+          <h4 class="mb-1">Deposit Now, Balance Later</h4>
+          <p class="mb-2">File: <code>pnr-import-package-deposit.json</code></p>
+          <p>A package booking totalling <strong>AUD 5,000</strong>. On invoice generation, the system creates two payment schedule items: an immediate deposit of <strong>AUD 1,000</strong> plus a service fee of <strong>AUD 150</strong>, and a future balance of <strong>AUD 4,000</strong> due 30 days before departure. Demonstrates multi-instalment payment scheduling and future balance tracking.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Import → Generate Invoice → Invoice Detail → View payment schedule → Simulate deposit collection → View future balance on Reports → Future Balances</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:var(--c360-yellow);color:#111;">3</span>
+        <div>
+          <h4 class="mb-1">Missing Cost Centre</h4>
+          <p class="mb-2">File: <code>pnr-import-missing-cost-centre.json</code></p>
+          <p>The PNR imports successfully but is flagged <code>Incomplete</code> because the cost centre field is absent. The Generate Invoice button is disabled and a warning banner lists the missing field. From the Booking Detail page you can assign the cost centre inline, which triggers re-validation. Once resolved, the booking advances to <code>ReadyForBilling</code> and invoicing proceeds normally.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Import → See Incomplete warning → Assign Cost Centre → Re-validate → Mark Ready → Generate Invoice</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:var(--c360-indigo);">4</span>
+        <div>
+          <h4 class="mb-1">Policy Payment Override</h4>
+          <p class="mb-2">Demonstrated via the Travel Policies page and any PNR with a policy code.</p>
+          <p>Coca-Cola has three travel policies. Each routes payment to a different card: APAC → <em>Mastercard ending 4444</em>, EMEA → <em>Amex ending 8431</em>, North America → default <em>Visa ending 1111</em>. When an invoice is generated, the policy on the booking determines which payment method reference is used for the collection simulation. This demonstrates that Cinturon360 enforces payment routing from policy config, not from ad-hoc user choice.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Travel Policies page → view policy/method mappings → Import any PNR → observe correct card selected on invoice</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:var(--c360-red);">5</span>
+        <div>
+          <h4 class="mb-1">Failed Payment</h4>
+          <p class="mb-2">File: <code>pnr-import-payment-failure.json</code></p>
+          <p>Import the PNR, generate the invoice, and simulate collection. The provider returns a <code>Failed</code> response (e.g. <em>insufficient funds</em>). The invoice status moves to <code>Overdue</code>, the payment attempt is recorded with failure reason, and the outstanding balance is visible on the Reports page. From the Invoice Detail page you can click <strong>Retry Payment</strong> to simulate a second attempt, or <strong>Mark Manual Payment Received</strong> to settle outside the platform.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Import → Generate Invoice → Simulate Collection (fails) → View failed attempt → Retry → or Mark Manual</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:#334155;">6</span>
+        <div>
+          <h4 class="mb-1">Manual Invoice</h4>
+          <p class="mb-2">File: <code>pnr-import-manual-invoice.json</code></p>
+          <p>The billing relationship for this booking is set to <code>ManualInvoice</code> mode. Invoice generation proceeds normally but no payment provider is involved. The invoice is marked <code>AwaitingManualSettlement</code>. The Invoice Detail page shows the <strong>Mark Manual Payment Received</strong> action. Clicking it records the settlement, updates the ledger, and marks the invoice <code>Paid</code>.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Import → Generate Invoice → Invoice Detail → Mark Manual Payment Received</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:var(--c360-green);color:#111;">7</span>
+        <div>
+          <h4 class="mb-1">External Finance Export</h4>
+          <p class="mb-2">File: <code>pnr-import-external-settlement.json</code></p>
+          <p>Generate an invoice for this booking, then navigate to <strong>Finance Exports</strong> and create an export to Xero, NetSuite, or the Generic CSV format. The export batch is created, the sample CSV is generated, and the invoice can be marked <code>ExternallyManaged</code> via the Invoice Detail page. This demonstrates that the Cinturon360 ledger retains the record even when the accounting is handed off to an external system.</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> Import → Generate Invoice → Finance Exports → Generate Export → Download CSV → Invoice Detail → Mark Externally Settled</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8 -->
+    <div class="page-card mb-3">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="scenario-num" style="background:var(--c360-orange);">8</span>
+        <div>
+          <h4 class="mb-1">ADM/ACM Handling</h4>
+          <p class="mb-2">File: <code>/mock-data/bsp/bsp-adm-acm-sample.csv</code></p>
+          <p>Navigate to the <strong>ADM/ACM Workbench</strong> and click <strong>Import BSP CSV</strong>. Paste the sample CSV content. The memos are parsed and matched to bookings by PNR and ticket number. Each memo shows the airline, reason code, amount, and matched booking. Decision actions: <strong>Dispute</strong> (flag as contested), <strong>Absorb Internally</strong> (HelloWorld bears the cost), or <strong>Recharge Client</strong> (creates an adjustment invoice line against Coca-Cola's invoice).</p>
+          <p class="mt-1 text-muted" style="font-size:0.82rem;"><strong>Steps:</strong> ADM/ACM Workbench → Import CSV → View memos → Act on each → View resulting ledger entries</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ MOCK DATA ═══ -->
+  <section id="mock-data">
+    <h2><i class="bi bi-folder2-open me-2 text-muted"></i>Mock Data Files</h2>
+    <p>
+      All static mock data files are served directly by the Web application. Browse them at
+      <a href="/mock-data" style="color:var(--c360-blue);"><strong>/mock-data</strong></a> —
+      the index page lists and links all files with descriptions.
+    </p>
+    <p>Files can also be accessed directly at their paths below:</p>
+
+    <h3><i class="bi bi-airplane me-2 text-muted"></i>GDS / PNR Files <code style="font-size:0.75rem;">/mock-data/gds/</code></h3>
+    <div class="file-card"><span class="file-icon">✈️</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-complete.json" style="color:var(--c360-blue);">pnr-import-complete.json</a></div><p class="file-desc">Scenario 1 — fully complete PNR. All fields present. Immediate card payment via Stripe.</p></div></div>
+    <div class="file-card"><span class="file-icon">📦</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-package-deposit.json" style="color:var(--c360-blue);">pnr-import-package-deposit.json</a></div><p class="file-desc">Scenario 2 — package booking requiring a deposit now and balance later.</p></div></div>
+    <div class="file-card"><span class="file-icon">⚠️</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-missing-cost-centre.json" style="color:var(--c360-blue);">pnr-import-missing-cost-centre.json</a></div><p class="file-desc">Scenario 3 — PNR missing cost centre. Triggers incomplete booking workflow.</p></div></div>
+    <div class="file-card"><span class="file-icon">❌</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-payment-failure.json" style="color:var(--c360-blue);">pnr-import-payment-failure.json</a></div><p class="file-desc">Scenario 5 — complete PNR but payment simulation returns a failure response.</p></div></div>
+    <div class="file-card"><span class="file-icon">📄</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-manual-invoice.json" style="color:var(--c360-blue);">pnr-import-manual-invoice.json</a></div><p class="file-desc">Scenario 6 — booking configured for manual invoice. No card provider involved.</p></div></div>
+    <div class="file-card"><span class="file-icon">🏦</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-external-settlement.json" style="color:var(--c360-blue);">pnr-import-external-settlement.json</a></div><p class="file-desc">Scenario 7 — booking to be exported to external finance system (Xero/NetSuite).</p></div></div>
+    <div class="file-card"><span class="file-icon">👻</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-shadow-billing.json" style="color:var(--c360-blue);">pnr-import-shadow-billing.json</a></div><p class="file-desc">Shadow billing mode — no actual collection. Booking tracked but no invoice collection occurs.</p></div></div>
+    <div class="file-card"><span class="file-icon">🔄</span><div><div class="file-name"><a href="/mock-data/gds/pnr-import-refund-reissue.json" style="color:var(--c360-blue);">pnr-import-refund-reissue.json</a></div><p class="file-desc">Refund and reissue scenario — demonstrates credit note and replacement invoice flow.</p></div></div>
+
+    <h3 class="mt-4"><i class="bi bi-bank me-2 text-muted"></i>BSP Files <code style="font-size:0.75rem;">/mock-data/bsp/</code></h3>
+    <div class="file-card"><span class="file-icon">🔴</span><div><div class="file-name"><a href="/mock-data/bsp/bsp-adm-acm-sample.csv" style="color:var(--c360-blue);">bsp-adm-acm-sample.csv</a></div><p class="file-desc">Scenario 8 — sample ADM/ACM CSV for import into the Agency Memo Workbench. Contains debit and credit memos with reason codes.</p></div></div>
+    <div class="file-card"><span class="file-icon">🎫</span><div><div class="file-name"><a href="/mock-data/bsp/bsp-ticket-reconciliation-sample.csv" style="color:var(--c360-blue);">bsp-ticket-reconciliation-sample.csv</a></div><p class="file-desc">Sample BSP ticket stock reconciliation file. Lists issued tickets by airline, document number, and value.</p></div></div>
+
+    <h3 class="mt-4"><i class="bi bi-file-earmark-spreadsheet me-2 text-muted"></i>Finance Export Samples <code style="font-size:0.75rem;">/mock-data/finance/</code></h3>
+    <div class="file-card"><span class="file-icon">🟢</span><div><div class="file-name"><a href="/mock-data/finance/xero-export-sample.csv" style="color:var(--c360-blue);">xero-export-sample.csv</a></div><p class="file-desc">Sample Xero CSV export. Columns: ContactName, EmailAddress, InvoiceNumber, InvoiceDate, DueDate, Description, Quantity, UnitAmount, TaxType, AccountCode, TaxAmount.</p></div></div>
+    <div class="file-card"><span class="file-icon">🔵</span><div><div class="file-name"><a href="/mock-data/finance/netsuite-export-sample.csv" style="color:var(--c360-blue);">netsuite-export-sample.csv</a></div><p class="file-desc">Sample NetSuite journal entry export. Columns: ExternalId, Date, Subsidiary, CurrencyCode, Memo, LineAccount, LineDebit, LineCredit, LineDepartment, LineEntity.</p></div></div>
+    <div class="file-card"><span class="file-icon">⚪</span><div><div class="file-name"><a href="/mock-data/finance/generic-ledger-export-sample.csv" style="color:var(--c360-blue);">generic-ledger-export-sample.csv</a></div><p class="file-desc">Universal CSV ledger export. All ledger entries with type, description, debit, credit, currency, and external reference. Importable into any accounting system.</p></div></div>
+
+    <h3 class="mt-4"><i class="bi bi-credit-card me-2 text-muted"></i>Payment Webhook Samples <code style="font-size:0.75rem;">/mock-data/payments/</code></h3>
+    <div class="file-card"><span class="file-icon">✅</span><div><div class="file-name"><a href="/mock-data/payments/stripe-webhook-payment-succeeded.json" style="color:var(--c360-blue);">stripe-webhook-payment-succeeded.json</a></div><p class="file-desc">Fake Stripe webhook payload for a successful payment. Shows the event structure that would be received from Stripe in a production system.</p></div></div>
+    <div class="file-card"><span class="file-icon">🚫</span><div><div class="file-name"><a href="/mock-data/payments/stripe-webhook-payment-failed.json" style="color:var(--c360-blue);">stripe-webhook-payment-failed.json</a></div><p class="file-desc">Fake Stripe webhook payload for a failed payment with reason code and decline details.</p></div></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ API REFERENCE ═══ -->
+  <section id="api-reference">
+    <h2><i class="bi bi-braces me-2 text-muted"></i>API Reference</h2>
+    <p>
+      The REST API is served at <code>http://localhost:5000</code>.
+      Interactive documentation with request/response schemas is available at
+      <a href="http://localhost:5000/swagger" style="color:var(--c360-blue);"><strong>http://localhost:5000/swagger</strong></a>.
+    </p>
+    <div class="callout mb-3">
+      The Swagger UI lets you execute any endpoint live against the running database.
+      Use it to inspect the request/response shapes, test individual actions, and understand the exact data model behind each UI page.
+      No authentication token is required in this local-only demo configuration.
+    </div>
+
+    <!-- Auth -->
+    <h3>Authentication — <code>/api/auth</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/auth/login</td><td class="endpoint-desc">Validates credentials against seeded user. Returns a server-side session cookie on success. Body: <code>{email, password}</code>.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Dashboard -->
+    <h3>Dashboard — <code>/api/dashboard</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/dashboard</td><td class="endpoint-desc">Returns platform-wide summary counts: bookings, invoices, payments, deposit/balance totals, ADM/ACM exposure, shadow billing.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Organisations -->
+    <h3>Organisations — <code>/api/organisations</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/organisations/tree</td><td class="endpoint-desc">Returns the full organisation hierarchy as a nested tree structure. Used by the Organisations page.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/organisations/{id}</td><td class="endpoint-desc">Returns full detail for a single organisation by GUID.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Billing Relationships -->
+    <h3>Billing Relationships — <code>/api/billing-relationships</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/billing-relationships</td><td class="endpoint-desc">Lists all seller–buyer billing relationships with mode, provider, terms, and risk flag.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Travel Policies -->
+    <h3>Travel Policies — <code>/api/travel-policies</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/travel-policies</td><td class="endpoint-desc">Lists all travel policies with billing behaviour and assigned payment method.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Payment Methods -->
+    <h3>Payment Methods — <code>/api/payment-methods</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/payment-methods</td><td class="endpoint-desc">Lists fake payment method display references. No real card data.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Imports -->
+    <h3>Imports — <code>/api/imports</code> and <code>/api/import-files</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/import-files/gds</td><td class="endpoint-desc">Lists available GDS PNR JSON files from <code>/mock-data/gds/</code> with display names.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/imports/gds/{fileName}</td><td class="endpoint-desc">Reads the specified JSON file, parses it as a PNR, validates completeness, and creates a Booking record. Returns the new booking ID.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/imports/bsp/agency-memos</td><td class="endpoint-desc">Accepts raw CSV text in the request body. Parses ADM/ACM records and creates AdmAcmMemo records. Returns count of imported memos.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Bookings -->
+    <h3>Bookings — <code>/api/bookings</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/bookings</td><td class="endpoint-desc">Lists all bookings with summary fields.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/bookings/{id}</td><td class="endpoint-desc">Full booking detail including segments, documents, schedule items, and missing-field list.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/bookings/{id}/set-cost-centre</td><td class="endpoint-desc">Assigns a cost centre code to a booking and re-runs completeness validation. Body: <code>{costCentreCode}</code>.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/bookings/{id}/set-travel-policy</td><td class="endpoint-desc">Assigns a travel policy code to a booking. Body: <code>{policyCode}</code>.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/bookings/{id}/mark-ready-for-billing</td><td class="endpoint-desc">Transitions a complete booking to <code>ReadyForBilling</code>. Fails if completeness checks have outstanding issues.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/bookings/{id}/generate-invoice</td><td class="endpoint-desc">Calculates booking finance (fare + taxes + service fee + surcharge), creates Invoice + InvoiceLine records, creates LedgerEntry, and writes BookingPaymentScheduleItems for deposit/balance splits.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Invoices -->
+    <h3>Invoices — <code>/api/invoices</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/invoices</td><td class="endpoint-desc">Lists all invoices with summary fields.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/invoices/{id}</td><td class="endpoint-desc">Full invoice detail including lines, schedule items, and payment attempts.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/invoices/{id}/simulate-collection</td><td class="endpoint-desc">Simulates routing the invoice to its configured payment provider. Returns a deterministic succeed/fail result and records a PaymentAttempt.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/invoices/{id}/retry-payment</td><td class="endpoint-desc">Creates a new PaymentAttempt for a failed invoice and re-runs the collection simulation.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/invoices/{id}/mark-manual-payment-received</td><td class="endpoint-desc">Records manual settlement. Creates a LedgerEntry credit and updates invoice status to <code>Paid</code>.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/invoices/{id}/mark-externally-settled</td><td class="endpoint-desc">Marks invoice as <code>ExternallyManaged</code>. Used after a finance export has been sent to Xero/NetSuite.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Ledger -->
+    <h3>Ledger — <code>/api/ledger</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/ledger</td><td class="endpoint-desc">Returns all ledger entries in reverse-chronological order.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Finance Exports -->
+    <h3>Finance Exports — <code>/api/finance-exports</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/finance-exports</td><td class="endpoint-desc">Lists all export batches with target system, status, invoice count, and timestamps.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/finance-exports</td><td class="endpoint-desc">Creates a new export batch for the specified target. Body: <code>{target}</code> where target is <code>Xero</code>, <code>NetSuite</code>, or <code>Generic</code>.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/finance-exports/{id}/download</td><td class="endpoint-desc">Downloads the sample CSV file for the given export batch.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Agency Memos -->
+    <h3>Agency Memos (ADM/ACM) — <code>/api/agency-memos</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/agency-memos</td><td class="endpoint-desc">Lists all ADM/ACM memo records with type, amount, airline, status, and matched booking.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/agency-memos/{id}</td><td class="endpoint-desc">Full memo detail including reason code, matched booking/invoice, and action history.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/agency-memos/{id}/set-outcome</td><td class="endpoint-desc">Records the decisioning outcome. Body: <code>{outcome}</code> where outcome is <code>Dispute</code>, <code>AbsorbInternally</code>, or <code>RechargeClient</code>. If RechargeClient, creates an adjustment invoice line.</td></tr>
+        <tr><td><span class="method-badge method-post">POST</span></td><td class="endpoint-path">/api/agency-memos/import-csv</td><td class="endpoint-desc">Accepts raw CSV text. Parses and imports ADM/ACM memo records. Returns import result summary.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Reports -->
+    <h3>Reports — <code>/api/reports</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/outstanding-balances</td><td class="endpoint-desc">Returns all invoices in an unpaid state with amounts due and due dates.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/future-balances</td><td class="endpoint-desc">Returns all payment schedule items with future due dates.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/failed-payments</td><td class="endpoint-desc">Returns all failed payment attempts with failure reasons.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/service-fees</td><td class="endpoint-desc">Returns all service fee invoice lines by booking and policy.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/adm-acm-exposure</td><td class="endpoint-desc">Returns total ADM/ACM exposure grouped by outcome status.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/shadow-billing</td><td class="endpoint-desc">Returns all bookings under shadow/trial billing mode with their notional amounts.</td></tr>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/reports/supplier-reconciliation</td><td class="endpoint-desc">Returns booking totals grouped by supplier for reconciliation reporting.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Audit -->
+    <h3>Audit — <code>/api/audit</code></h3>
+    <table class="table table-sm table-dark api-table">
+      <thead><tr><th style="width:80px;">Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method-badge method-get">GET</span></td><td class="endpoint-path">/api/audit</td><td class="endpoint-desc">Returns all audit events in reverse-chronological order.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ PROVIDERS ═══ -->
+  <section id="providers">
+    <h2><i class="bi bi-plug me-2 text-muted"></i>Simulated Payment Providers</h2>
+    <p>
+      All payment provider behaviour in Cinturon360 is deterministic simulation. <strong>No external API calls are made.</strong>
+      Each provider name appears in billing relationships, travel policies, and invoice records purely as a routing label.
+      The actual "collection" is a local function that returns a success or failure result based on the scenario configuration.
+    </p>
+    <p>Supported provider types:</p>
+    <div class="d-flex flex-wrap mb-3">
+      <span class="provider-pill"><i class="bi bi-lightning-charge"></i> Stripe</span>
+      <span class="provider-pill"><i class="bi bi-globe"></i> Airwallex</span>
+      <span class="provider-pill"><i class="bi bi-wallet2"></i> Braintree</span>
+      <span class="provider-pill"><i class="bi bi-paypal"></i> PayPal</span>
+      <span class="provider-pill"><i class="bi bi-shop"></i> Square</span>
+      <span class="provider-pill"><i class="bi bi-file-text"></i> Manual Invoice</span>
+      <span class="provider-pill"><i class="bi bi-building"></i> External Finance System</span>
+      <span class="provider-pill"><i class="bi bi-person-check"></i> Partner Managed Billing</span>
+      <span class="provider-pill"><i class="bi bi-eye"></i> Shadow Billing / Trial</span>
+    </div>
+
+    <h3>What "simulation" means in practice</h3>
+    <p>When <code>simulate-collection</code> is called on an invoice, the API:</p>
+    <ol class="step-list">
+      <li>Looks up the invoice's billing mode and provider type</li>
+      <li>Checks the booking's scenario type to determine if the result should be <code>Succeeded</code> or <code>Failed</code></li>
+      <li>Creates a <code>PaymentAttempt</code> record with a fake external reference (e.g. <code>ch_fake_stripe_...</code>)</li>
+      <li>Creates a corresponding <code>LedgerEntry</code> (debit for failed, credit for succeeded)</li>
+      <li>Updates the invoice status accordingly</li>
+      <li>Writes an <code>AuditEvent</code></li>
+    </ol>
+    <div class="callout orange">
+      <strong>Why this matters for the demo:</strong> Even though the provider is simulated, the internal records — ledger, invoice, audit trail — are fully real database records with referential integrity. This proves that the Cinturon360 layer is provider-agnostic: swapping Stripe for Airwallex changes only the routing label and the API credential, not any of the core billing logic.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ ARCHITECTURE PRINCIPLE ═══ -->
+  <section id="architecture-principle">
+    <h2><i class="bi bi-lock me-2 text-muted"></i>Ownership Principle — Cinturon360 Owns the Billing Logic</h2>
+
+    <div class="callout indigo mb-4">
+      <p class="mb-1" style="font-size:1.05rem;font-weight:600;color:#a5b4fc;">
+        "Cinturon360 owns the internal booking-finance logic, ledger, invoice structure, and audit trail.
+        Payment providers, finance systems, GDS/NDC imports, and BSP-style files are simulated channels only."
+      </p>
+    </div>
+
+    <p>This principle is demonstrated concretely in the following ways throughout the UI and API:</p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-journal-bookmark me-2" style="color:var(--c360-indigo);"></i>Ledger as Source of Truth</h4>
+          <p>Every financial action — regardless of which provider handles it — creates a <code>LedgerEntry</code> in the Cinturon360 database. The invoice detail page carries a persistent notice stating this explicitly. Provider references are stored for traceability, but the ledger is not derived from provider data.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-plug me-2" style="color:var(--c360-blue);"></i>Providers Are Channels</h4>
+          <p>Stripe, Airwallex, and others appear as selectable routing targets. Changing the provider on a billing relationship changes where the collection is sent — it does not change the invoice structure, the ledger schema, or any booking finance calculation. The core logic is provider-neutral.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-cloud-arrow-up me-2" style="color:var(--c360-green);"></i>GDS / BSP Are Import Channels</h4>
+          <p>PNR data from a GDS and BSP debit memo data are ingested as raw inputs. Once inside Cinturon360, they are normalised into the domain model (Booking, Segment, Document, AdmAcmMemo). The platform owns the validation, matching, and decisioning from that point forward.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-box-arrow-up-right me-2" style="color:var(--c360-orange);"></i>Finance Systems Are Export Targets</h4>
+          <p>Xero and NetSuite receive export files, but they do not define invoices. The invoice is generated, valued, and recorded in Cinturon360 first. The export is a secondary representation for external accounting. Marking an invoice <code>ExternallyManaged</code> does not delete or modify the internal record.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-shield-check me-2" style="color:var(--c360-yellow);"></i>Policy Owns Routing Decisions</h4>
+          <p>Travel policies determine which payment card is used and how billing flows. This is configured inside Cinturon360 — the client or provider cannot override it. The APAC card, EMEA card, and default org billing are all enforced at invoice generation time based on the booking's matched policy.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="page-card">
+          <h4><i class="bi bi-clock-history me-2" style="color:var(--c360-red);"></i>Audit Trail is Immutable</h4>
+          <p>Every action — import, validation, invoice generation, payment attempt, ADM decision, export — is written to the <code>AuditEvent</code> table. The audit log cannot be edited from the UI. It provides a complete, chronological record of who did what, independent of external systems.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green mt-4">
+      <strong>In summary:</strong> A travel agency using Cinturon360 could replace Stripe with Airwallex, replace Amadeus GDS with Sabre, or replace Xero with NetSuite — and none of those changes would affect the invoice numbers, the ledger, the audit trail, or the billing logic. The platform is the constant. The external systems are interchangeable.
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div class="divider"></div>
+  <footer class="text-muted text-center pb-4" style="font-size:0.8rem;">
+    <p class="mb-1">Cinturon360 Mock MVP — Local demo only. No external services. No real payment data.</p>
+    <p class="mb-0">
+      <a href="/" style="color:#475569;">Web UI</a> &nbsp;·&nbsp;
+      <a href="/mock-data" style="color:#475569;">Mock Data</a> &nbsp;·&nbsp;
+      <a href="http://localhost:5000/swagger" style="color:#475569;">Swagger API</a> &nbsp;·&nbsp;
+      <a href="/readme" style="color:#475569;">This Page</a>
+    </p>
+  </footer>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Highlight active sidebar link based on scroll position
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('#sidebar .nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -75% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

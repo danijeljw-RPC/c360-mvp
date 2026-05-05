@@ -1,0 +1,10 @@
+{
+  "provider": "Stripe",
+  "eventType": "payment_intent.payment_failed",
+  "mock": true,
+  "invoiceNumber": "INV-HWT-0002",
+  "amount": 2205.55,
+  "currency": "AUD",
+  "failureCode": "insufficient_funds",
+  "paymentMethod": "pm_mock_mastercard_4444"
+}

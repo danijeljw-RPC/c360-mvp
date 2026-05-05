@@ -18,7 +18,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddHttpContextAccessor();
 
-var apiBase = builder.Configuration["ApiBaseUrl"] ?? "http://localhost:5088";
+var apiBase = builder.Configuration["ApiBaseUrl"] ?? "http://localhost:8090";
 var apiPublicUrl = builder.Configuration["ApiPublicUrl"] ?? apiBase;
 builder.Services.AddHttpClient<ApiClient>(c => c.BaseAddress = new Uri(apiBase));
 builder.Services.AddSingleton(new ApiPublicBaseUrl(apiPublicUrl));

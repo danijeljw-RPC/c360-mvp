@@ -1,0 +1,9 @@
+{
+  "provider": "Stripe",
+  "eventType": "payment_intent.succeeded",
+  "mock": true,
+  "invoiceNumber": "INV-HWT-0001",
+  "amount": 535.9,
+  "currency": "AUD",
+  "paymentMethod": "pm_mock_amex_8431"
+}
