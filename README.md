@@ -339,83 +339,102 @@ Then open the UI at `http://192.168.1.50:5089`.
 
 ---
 
-### Environment 3 — Public internet with HTTPS (client demo)
+### Environment 3 — Public internet with HTTPS via Caddy (mvp.dev.cinturon360.com)
 
-This is the recommended setup for demoing to clients over a public domain such as `https://demo.cinturon360.com`.
+This is the setup for deploying to a public server using `docker-compose.yml` (the default compose file). Caddy runs inside the Docker stack and handles TLS termination using Cloudflare Origin certificates.
 
-You need a reverse proxy (nginx, Caddy, or Traefik) running on the same host as Docker. The proxy handles TLS termination and forwards traffic to the two containers.
+There is no separate reverse proxy to install on the host — Caddy is a service in the compose file.
 
-#### Recommended: two subdomains
+#### Compose files
 
-| Public URL | Proxies to |
+| File | Purpose |
 |---|---|
-| `https://demo.cinturon360.com` | `http://localhost:5089` (web container) |
-| `https://api-demo.cinturon360.com` | `http://localhost:5088` (API container) |
+| `docker-compose.yml` | Public deployment — includes Caddy, no host ports exposed for API/web |
+| `docker-compose.local.yml` | Local development — no Caddy, API on `8090`, web on `8080` |
 
-Set `docker-compose.yml`:
+#### Public URLs
 
-```yaml
-services:
-  web:
-    environment:
-      ApiBaseUrl: http://api:8080                         # DO NOT CHANGE
-      ApiPublicUrl: https://api-demo.cinturon360.com      # public API hostname
-```
-
-#### Alternative: single domain with path-based routing
-
-If you only have one domain and want to serve both web and API from it:
-
-| Public URL | Proxies to |
+| URL | Service |
 |---|---|
-| `https://demo.cinturon360.com` | `http://localhost:5089` (web) |
-| `https://demo.cinturon360.com/api/*` | `http://localhost:5088` (API) |
+| `https://mvp.dev.cinturon360.com` | Blazor web UI |
+| `https://api.mvp.dev.cinturon360.com` | REST API |
+| `https://api.mvp.dev.cinturon360.com/swagger` | Swagger UI (engineering) |
 
-Set `docker-compose.yml`:
+Both subdomains must have DNS A records pointing to the server. Both use the same Cloudflare Origin certificate.
 
-```yaml
-services:
-  web:
-    environment:
-      ApiBaseUrl: http://api:8080                         # DO NOT CHANGE
-      ApiPublicUrl: https://demo.cinturon360.com          # same domain — /api/* routed to API container
+#### Certificate setup
+
+Place your Cloudflare Origin certificates in a `certs/` directory at the project root on the server:
+
+```text
+certs/
+  cloudflare-origin.pem        ← certificate (public)
+  cloudflare-origin-key.pem    ← private key (keep secret)
 ```
 
-Your reverse proxy must forward `location /api/` to `http://localhost:5088`. Example nginx block:
+The `certs/` directory is in `.gitignore`. Never commit certificates to the repository.
 
-```nginx
-server {
-    listen 443 ssl;
-    server_name demo.cinturon360.com;
+Set correct file permissions before starting the stack:
 
-    # TLS config here (cert/key or certbot managed)
+```bash
+# The cert directory must be readable by the Caddy container (runs as root)
+chmod 755 certs/
 
-    # API traffic — forward /api/* to the API container
-    location /api/ {
-        proxy_pass http://localhost:5088;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+# Certificate file — readable by owner and group, not world-writable
+chmod 644 certs/cloudflare-origin.pem
 
-    # All other traffic — forward to the Blazor web container
-    location / {
-        proxy_pass http://localhost:5089;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";   # required for Blazor Server SignalR
-    }
-}
+# Private key — readable by owner only
+chmod 600 certs/cloudflare-origin-key.pem
 ```
 
-> **Blazor Server requires WebSocket / SignalR.** Ensure your proxy passes `Upgrade` and `Connection` headers as shown above. If WebSocket is blocked, the UI will not function after initial load.
+Verify:
 
-#### SSL certificates
+```bash
+ls -la certs/
+# Expected output:
+# drwxr-xr-x  cloudflare-origin.pem
+# -rw-r--r--  cloudflare-origin.pem
+# -rw-------  cloudflare-origin-key.pem
+```
 
-For a public demo domain, use [Let's Encrypt](https://letsencrypt.org/) via certbot or Caddy's automatic TLS. For an internal domain, use your organisation's certificate authority.
+#### Running on the target server
+
+```bash
+# Clone or copy the project to the server
+git clone <repo-url> c360-mvp
+cd c360-mvp
+
+# Place certs (copy from secure storage, do not commit)
+mkdir -p certs
+cp /path/to/cloudflare-origin.pem certs/
+cp /path/to/cloudflare-origin-key.pem certs/
+chmod 644 certs/cloudflare-origin.pem
+chmod 600 certs/cloudflare-origin-key.pem
+
+# Build and start the full stack (Caddy + web + API + postgres)
+docker compose up -d --build
+
+# Check all services are running
+docker compose ps
+
+# Follow logs
+docker compose logs -f caddy web api
+```
+
+The site will be available at `https://mvp.dev.cinturon360.com` once DNS resolves to the server and the stack is running.
+
+#### Stopping and resetting
+
+```bash
+# Stop without removing data
+docker compose down
+
+# Full reset — removes all data volumes
+docker compose down -v
+docker compose up -d --build
+```
+
+> **Blazor Server requires WebSocket / SignalR.** Caddy proxies WebSocket connections automatically. No additional configuration is required.
 
 ---
 

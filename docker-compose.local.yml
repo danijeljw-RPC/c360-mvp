@@ -6,6 +6,8 @@ services:
       POSTGRES_DB: cinturon360_mock
       POSTGRES_USER: cinturon360
       POSTGRES_PASSWORD: cinturon360_dev_password
+    ports:
+      - "54329:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
@@ -21,9 +23,11 @@ services:
       dockerfile: src/Cinturon360.Mock.Api/Dockerfile
     container_name: cinturon360-mock-api
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8090
       ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=cinturon360_mock;Username=cinturon360;Password=cinturon360_dev_password
+    ports:
+      - "8090:8090"
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,30 +38,14 @@ services:
       dockerfile: src/Cinturon360.Mock.Web/Dockerfile
     container_name: cinturon360-mock-web
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
       ApiBaseUrl: http://api:8090
-      ApiPublicUrl: https://api.mvp.dev.cinturon360.com
+      ApiPublicUrl: http://localhost:8090
+    ports:
+      - "8080:8080"
     depends_on:
       - api
 
-  caddy:
-    image: caddy:2-alpine
-    container_name: cinturon360-mock-caddy
-    ports:
-      - "0.0.0.0:80:80"
-      - "[::]:80:80"
-      - "0.0.0.0:443:443"
-      - "[::]:443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./certs:/certs:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - web
-
 volumes:
   pgdata:
-  caddy_data:
-  caddy_config:

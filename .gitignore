@@ -6,6 +6,13 @@
 # dotenv files
 .env
 
+# Caddy / Cloudflare origin certificates
+caddy/certs/
+certs/
+*.pem
+*.key
+*.crt
+
 # User-specific files
 *.rsuser
 *.suo

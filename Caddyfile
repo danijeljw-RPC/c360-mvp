@@ -1,0 +1,15 @@
+{
+    bind 0.0.0.0 [::]
+}
+
+mvp.dev.cinturon360.com {
+    tls /certs/cloudflare-origin.pem /certs/cloudflare-origin-key.pem
+
+    reverse_proxy web:8080
+}
+
+api.mvp.dev.cinturon360.com {
+    tls /certs/cloudflare-origin.pem /certs/cloudflare-origin-key.pem
+
+    reverse_proxy api:8090
+}
